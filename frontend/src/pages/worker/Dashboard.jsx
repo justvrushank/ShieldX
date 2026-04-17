@@ -7,8 +7,11 @@ import Badge from '../../components/ui/Badge'
 import LiveDot from '../../components/ui/LiveDot'
 import ChatWidget from '../../components/chat/ChatWidget'
 import { ZoneMonitor } from '../../components/dashboard/ZoneMonitor'
+import { LiveActivityFeed } from '../../components/dashboard/LiveActivityFeed'
+import { PayoutProcessingModal } from '../../components/ui/PayoutProcessingModal'
 import IncomeTierBadge from '../../components/ui/IncomeTierBadge'
 import { useWorkerStore } from '../../store/workerStore'
+import { useDemoStore } from '../../store/demoStore'
 import { formatINR } from '../../utils/formatters'
 import { downloadProtectionCertificate, getMyClaims, getMyProfile, getMyZoneForecast, getWellnessScore } from '../../services/api'
 import { useTranslation } from '../../i18n/useTranslation'
@@ -28,6 +31,9 @@ const fadeUp = {
 }
 
 export default function Dashboard() {
+  const addActivity = useDemoStore((s) => s.addActivity)
+  const lastSimPayout = useDemoStore((s) => s.lastSimPayout)
+  const setLastSimPayout = useDemoStore((s) => s.setLastSimPayout)
   const navigate = useNavigate()
   const worker = useWorkerStore((s) => s.worker)
   const activePolicy = useWorkerStore((s) => s.activePolicy)
@@ -38,7 +44,7 @@ export default function Dashboard() {
   const setActivePolicy = useWorkerStore((s) => s.setActivePolicy)
   const { t } = useTranslation()
   const now = new Date()
-  const activePolicyId = activePolicy?.policyId || useWorkerStore.getState().activePolicy?.policyId
+  const activePolicyId = activePolicy?.policyId
   const weekStartDate = new Date(now)
   weekStartDate.setDate(now.getDate() - now.getDay() + 1)
   const weekEndDate = new Date(weekStartDate)
@@ -193,7 +199,7 @@ export default function Dashboard() {
         icon: '/favicon.ico',
       })
     }
-  }, [showAlert])
+  }, [showAlert, zoneAlert])
 
   useEffect(() => {
     if (!activePolicy) return
@@ -213,6 +219,20 @@ export default function Dashboard() {
     const interval = setInterval(poll, 20000)
     return () => clearInterval(interval)
   }, [activePolicy])
+
+  // React to admin simulation — show as new payout banner in worker dashboard
+  useEffect(() => {
+    if (!lastSimPayout) return
+    const payout = lastSimPayout
+    setLastSimPayout(null) // clear first to prevent re-trigger
+    setNewClaimAlert({
+      id: 'sim-' + Date.now(),
+      amount: payout.amount,
+      trigger_type: payout.triggerType,
+      event: `${payout.triggerType} payout`,
+    })
+    addActivity({ icon: '\uD83D\uDCB0', text: `\u20B9${payout.amount} payout processed — ${payout.city}` })
+  }, [lastSimPayout]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const greeting = () => {
     const h = new Date().getHours()
@@ -235,23 +255,23 @@ export default function Dashboard() {
 
   const stats = [
     {
-      label: 'TOTAL PAID OUT',
+      label: 'Total paid out',
       value: displayTotalProtected > 0 ? formatINR(displayTotalProtected) : (activePolicy ? `₹${activePolicy.coverage || 600}` : '₹0'),
       sub: totalClaims > 0 ? `${totalClaims} payout${totalClaims > 1 ? 's' : ''} received` : 'Coverage active',
-      valueColor: '#D97757',
+      valueColor: '#818CF8',
     },
     {
-      label: 'PREMIUM PAID',
+      label: 'Premium paid',
       value: activePolicy ? `₹${activePolicy.price || w.premium}` : '₹0',
       sub: activePolicy ? 'This week' : 'No active plan',
-      valueColor: '#0F0F0F',
+      valueColor: '#F1F5F9',
     },
-    { label: 'RISK SCORE', value: `${w.riskScore}`, sub: `${riskTierLabel} · ${riskDiscount}`, valueColor: '#12B76A' },
+    { label: 'Risk score', value: `${w.riskScore}`, sub: `${riskTierLabel} · ${riskDiscount}`, valueColor: '#22C55E' },
     {
-      label: 'PLAN ENDS',
+      label: 'Plan ends',
       value: policyEndDate || 'Not covered',
       sub: activePolicy ? `₹${activePolicy.price || w.premium} due` : 'Get a plan',
-      valueColor: '#0F0F0F',
+      valueColor: '#F1F5F9',
     },
   ]
 
@@ -318,13 +338,33 @@ export default function Dashboard() {
             <p className="text-[13px] font-body" style={{ color: 'var(--text-secondary)' }}>{greeting()} 👋</p>
             <h1 className="font-display font-bold text-[24px] mt-0.5" style={{ color: 'var(--text-primary)' }}>{firstName}</h1>
           </div>
-          <div
-            className="w-9 h-9 rounded-full bg-brand flex items-center justify-center cursor-pointer"
-            onClick={() => navigate('/profile')}
-          >
-            <span className="font-display font-bold text-[13px] text-white">
-              {firstName[0]}{w.name?.split(' ')[1]?.[0] || ''}
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {/* Live monitoring badge */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'rgba(34,197,94,0.1)',
+              border: '1px solid rgba(34,197,94,0.2)',
+              borderRadius: 999,
+              padding: '5px 10px',
+            }}>
+              <span style={{ position: 'relative', display: 'inline-flex', width: 8, height: 8 }}>
+                <span style={{
+                  position: 'absolute', inset: 0, borderRadius: 999,
+                  background: '#22C55E', opacity: 0.4,
+                  animation: 'pulse-ring 1.5s ease-out infinite',
+                }} />
+                <span style={{ width: 8, height: 8, borderRadius: 999, background: '#22C55E', display: 'block' }} />
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Inter', color: '#22C55E', letterSpacing: '0.5px' }}>Live</span>
+            </div>
+            <div
+              className="w-9 h-9 rounded-full bg-brand flex items-center justify-center cursor-pointer"
+              onClick={() => navigate('/profile')}
+            >
+              <span className="font-display font-bold text-[13px] text-white">
+                {firstName[0]}{w.name?.split(' ')[1]?.[0] || ''}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -336,31 +376,34 @@ export default function Dashboard() {
             <div
               className="rounded-card p-5"
               style={{
-                background: 'linear-gradient(135deg, #D97757, #B85C3A)',
-                boxShadow: '0 8px 32px rgba(217,119,87,0.35)',
+                background: 'linear-gradient(135deg, #312E81, #1E1B4B)',
+                border: '1px solid rgba(99,102,241,0.3)',
+                boxShadow: '0 8px 32px rgba(99,102,241,0.25)',
               }}
             >
               <div className="flex items-center gap-2 mb-3">
                 <span style={{ fontSize: 24 }}>🛡️</span>
-                <p style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Inter, sans-serif', color: 'rgba(255,255,255,0.8)', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Inter, sans-serif', color: 'rgba(165,180,252,0.9)', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
                   Not covered yet
                 </p>
               </div>
               <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 26, fontWeight: 800, color: 'white', margin: '0 0 8px', letterSpacing: -0.5 }}>
                 Get covered from ₹49/week
               </h2>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', fontFamily: 'Inter, sans-serif', margin: '0 0 18px', lineHeight: 1.5 }}>
+              <p style={{ fontSize: 14, color: 'rgba(165,180,252,0.75)', fontFamily: 'Inter, sans-serif', margin: '0 0 18px', lineHeight: 1.5 }}>
                 We monitor floods, platform outages, and curfews in your zone — and pay you automatically when something happens. No forms.
               </p>
               <motion.button
                 onClick={() => navigate('/coverage')}
+                whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
                 whileTap={{ scale: 0.97 }}
                 style={{
-                  width: '100%', padding: '13px', borderRadius: 10, border: 'none',
-                  background: 'white', color: '#D97757',
+                  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
+                  background: 'linear-gradient(135deg, #6366F1, #4F46E5)', color: 'white',
                   fontSize: 15, fontWeight: 700, fontFamily: 'Inter, sans-serif',
-                  cursor: 'pointer',
+                  cursor: 'pointer', transition: 'all 0.2s ease',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
                 }}
               >
                 View coverage plans →
@@ -369,7 +412,6 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* ML Pricing Engine — compact preview */}
         {/* Policy card — only when active */}
         {activePolicy && (
           <motion.div variants={fadeUp}>
@@ -377,8 +419,9 @@ export default function Dashboard() {
               id="policy-hero-card"
               className="rounded-card p-5"
               style={{
-                background: 'linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #3d1f0d 100%)',
-                boxShadow: '0 12px 32px rgba(217,119,87,0.25), 0 4px 8px rgba(0,0,0,0.15)',
+                background: 'linear-gradient(135deg, #1E293B 0%, #1a1f3a 50%, #151c35 100%)',
+                border: '1px solid rgba(99,102,241,0.2)',
+                boxShadow: '0 12px 32px rgba(99,102,241,0.15), 0 4px 8px rgba(0,0,0,0.3)',
                 position: 'relative',
                 overflow: 'hidden',
               }}
@@ -388,23 +431,23 @@ export default function Dashboard() {
                 position: 'absolute', top: -40, right: -40,
                 width: 160, height: 160,
                 borderRadius: 999,
-                background: 'radial-gradient(circle, rgba(217,119,87,0.18) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)',
                 pointerEvents: 'none',
               }} />
 
               <div className="flex items-center justify-between mb-2">
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(18,183,106,0.18)',
-                  border: '1px solid rgba(18,183,106,0.3)',
+                  background: 'rgba(34,197,94,0.12)',
+                  border: '1px solid rgba(34,197,94,0.25)',
                   borderRadius: 999, padding: '4px 10px',
                 }}>
                   <LiveDot status="active" />
-                  <span style={{ fontSize: 10, fontWeight: 700, fontFamily: 'Inter', color: '#12B76A', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, fontFamily: 'Inter', color: '#22C55E', letterSpacing: '1px', textTransform: 'uppercase' }}>
                     {activePolicy.status === 'ACTIVE' ? 'Active' : (activePolicy.status || 'Active')}
                   </span>
                 </div>
-                <span style={{ fontSize: 12, fontFamily: 'Inter', color: 'rgba(255,255,255,0.5)' }}>
+                <span style={{ fontSize: 12, fontFamily: 'Inter', color: 'rgba(255,255,255,0.4)' }}>
                   {activePolicy.weekStart
                     ? `${new Date(activePolicy.weekStart).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} – ${new Date(activePolicy.weekEnd).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
                     : 'This week'}
@@ -414,15 +457,15 @@ export default function Dashboard() {
               <div style={{ fontFamily: 'Bricolage Grotesque', fontWeight: 800, fontSize: 48, letterSpacing: -2, lineHeight: 1, color: 'white', marginTop: 8 }}>
                 ₹{activePolicy.coverage || 600}
               </div>
-              <p style={{ fontSize: 13, fontFamily: 'Inter', color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>
+              <p style={{ fontSize: 13, fontFamily: 'Inter', color: 'rgba(165,180,252,0.7)', marginTop: 4 }}>
                 coverage this week · {activePolicy.planName || activePolicy.planId || 'Standard'} plan
               </p>
 
-              <div style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '14px 0' }} />
+              <div style={{ height: 1, background: 'rgba(99,102,241,0.15)', margin: '14px 0' }} />
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p style={{ fontSize: 11, fontFamily: 'Inter', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Next renewal</p>
+                  <p style={{ fontSize: 11, fontFamily: 'Inter', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Next renewal</p>
                   <p style={{ fontSize: 14, fontWeight: 600, fontFamily: 'Inter', color: 'white', marginTop: 3 }}>
                     {policyEndDate} · ₹{activePolicy.price || w.premium}
                   </p>
@@ -431,11 +474,11 @@ export default function Dashboard() {
                   style={{ textAlign: 'right', cursor: 'pointer' }}
                   onClick={() => navigate('/risk-score')}
                 >
-                  <p style={{ fontSize: 11, fontFamily: 'Inter', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Risk score</p>
-                  <p style={{ fontSize: 14, fontWeight: 700, fontFamily: 'Inter', color: '#12B76A', marginTop: 3 }}>
+                  <p style={{ fontSize: 11, fontFamily: 'Inter', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Risk score</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, fontFamily: 'Inter', color: '#22C55E', marginTop: 3 }}>
                     {w.riskScore} · {w.riskTier === 'LOW' ? 'Low' : w.riskTier === 'HIGH' ? 'High' : 'Medium'}
                   </p>
-                  <span style={{ fontSize: 11, color: '#D97757', fontFamily: 'Inter', fontWeight: 600 }}>
+                  <span style={{ fontSize: 11, color: '#A5B4FC', fontFamily: 'Inter', fontWeight: 600 }}>
                     View breakdown →
                   </span>
                 </div>
@@ -448,10 +491,10 @@ export default function Dashboard() {
                 style={{
                   width: '100%',
                   marginTop: 14,
-                  border: '1px solid rgba(255,255,255,0.14)',
+                  border: '1px solid rgba(99,102,241,0.2)',
                   borderRadius: 12,
                   padding: '12px 14px',
-                  background: 'rgba(255,255,255,0.08)',
+                  background: 'rgba(99,102,241,0.1)',
                   color: 'white',
                   fontSize: 13,
                   fontWeight: 700,
@@ -462,10 +505,11 @@ export default function Dashboard() {
                   gap: 8,
                   cursor: downloadLoading || !activePolicyId ? 'not-allowed' : 'pointer',
                   opacity: downloadLoading || !activePolicyId ? 0.7 : 1,
+                  transition: 'all 0.2s ease',
                 }}
               >
                 {downloadLoading ? <LoaderCircle size={16} className="animate-spin" /> : <Download size={16} />}
-                {downloadLoading ? 'Downloading...' : 'Download Certificate'}
+                {downloadLoading ? 'Downloading...' : 'Download certificate'}
               </button>
             </div>
           </motion.div>
@@ -562,22 +606,22 @@ export default function Dashboard() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-card shadow-card p-3.5"
-              style={{ background: 'var(--bg-card)', cursor: stat.label === 'RISK SCORE' ? 'pointer' : 'default' }}
-              onClick={stat.label === 'RISK SCORE' ? () => navigate('/risk-score') : undefined}
+              className="rounded-card shadow-card p-3.5 card-hover"
+              style={{ background: 'var(--bg-card)', cursor: stat.label === 'Risk score' ? 'pointer' : 'default', border: '1px solid var(--border)', transition: 'all 0.25s ease' }}
+              onClick={stat.label === 'Risk score' ? () => navigate('/risk-score') : undefined}
             >
-              <p className="text-[11px] font-medium font-body tracking-[0.5px] uppercase" style={{ color: 'var(--text-tertiary)' }}>
+              <p className="text-[11px] font-medium font-body tracking-[0.5px]" style={{ color: 'var(--text-tertiary)' }}>
                 {stat.label}
               </p>
               <p
                 className="font-display font-bold text-[22px] mt-1 leading-tight"
-                style={{ color: stat.valueColor === '#0F0F0F' ? 'var(--text-primary)' : stat.valueColor }}
+                style={{ color: stat.valueColor }}
               >
                 {stat.value}
               </p>
               <p className="text-[12px] font-body mt-0.5" style={{ color: 'var(--text-secondary)' }}>{stat.sub}</p>
-              {stat.label === 'RISK SCORE' && (
-                <span style={{ fontSize: 11, color: '#D97757', fontFamily: 'Inter', fontWeight: 600 }}>
+              {stat.label === 'Risk score' && (
+                <span style={{ fontSize: 11, color: '#A5B4FC', fontFamily: 'Inter', fontWeight: 600 }}>
                   View breakdown →
                 </span>
               )}
@@ -658,25 +702,27 @@ export default function Dashboard() {
           </p>
           <div className="grid grid-cols-4 gap-2">
             {[
-              { icon: ShieldCheck, label: 'Earnings', path: '/earnings', color: '#12B76A', bg: '#ECFDF3' },
-              { icon: MapPin, label: t('zone_intel'), path: '/zone-intel', color: '#2E90FA', bg: '#EFF8FF' },
-              { icon: Bot, label: t('assistant'), path: '/assistant', color: '#D97757', bg: '#FDF1ED' },
-              { icon: TrendingUp, label: t('risk_score'), path: '/risk-score', color: '#7A5AF8', bg: '#F4F3FF' },
-              { icon: Zap, label: 'How It Works', path: '/how-it-works', color: '#F79009', bg: '#FFFAEB' },
+              { icon: ShieldCheck, label: 'Earnings', path: '/earnings', color: '#22C55E', bg: 'rgba(34,197,94,0.12)' },
+              { icon: MapPin, label: t('zone_intel'), path: '/zone-intel', color: '#38BDF8', bg: 'rgba(56,189,248,0.12)' },
+              { icon: Bot, label: t('assistant'), path: '/assistant', color: '#A5B4FC', bg: 'rgba(99,102,241,0.15)' },
+              { icon: TrendingUp, label: t('risk_score'), path: '/risk-score', color: '#A78BFA', bg: 'rgba(167,139,250,0.12)' },
+              { icon: Zap, label: 'How it works', path: '/how-it-works', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)' },
             ].map((action) => {
               const Icon = action.icon
               return (
                 <motion.button
                   key={action.path}
+                  whileHover={{ scale: 1.04, y: -2 }}
                   whileTap={{ scale: 0.94 }}
                   onClick={() => navigate(action.path)}
                   style={{
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
                     gap: 6, padding: '12px 4px',
                     borderRadius: 12,
-                    border: '1px solid var(--border-light)',
+                    border: '1px solid var(--border)',
                     background: 'var(--bg-card)',
                     cursor: 'pointer',
+                    transition: 'all 0.2s ease',
                   }}
                 >
                   <div style={{
@@ -710,12 +756,12 @@ export default function Dashboard() {
           <div className="rounded-card shadow-card overflow-hidden" style={{ background: 'var(--bg-card)' }}>
             {paidClaims.length === 0 ? (
               <div style={{ padding: '28px 16px', textAlign: 'center' }}>
-                <span style={{ fontSize: 32, display: 'block', marginBottom: 10 }}>💸</span>
+                <span style={{ fontSize: 32, display: 'block', marginBottom: 10 }}>💰</span>
                 <p style={{ fontSize: 14, fontWeight: 600, fontFamily: 'Bricolage Grotesque, sans-serif', color: 'var(--text-primary)', margin: '0 0 4px' }}>
-                  No payouts yet
+                  No payouts yet — you're all set 👍
                 </p>
                 <p style={{ fontSize: 13, color: 'var(--text-tertiary)', fontFamily: 'Inter, sans-serif', margin: 0 }}>
-                  ShieldX is watching your zone — payouts show up here when a trigger fires
+                  ShieldX is watching your zone. Payouts land here automatically when a trigger fires.
                 </p>
               </div>
             ) : (
@@ -751,7 +797,15 @@ export default function Dashboard() {
             )}
           </div>
         </motion.div>
+
+        {/* Live Activity Feed */}
+        <motion.div variants={fadeUp}>
+          <LiveActivityFeed />
+        </motion.div>
       </motion.div>
+
+      {/* Global Payout Processing Modal */}
+      <PayoutProcessingModal />
 
       {/* Tour button — floating above chat button */}
       <motion.button
@@ -766,13 +820,14 @@ export default function Dashboard() {
           zIndex: 90,
           width: 44, height: 44,
           borderRadius: 999,
-          background: '#0F0F0F',
-          border: '2px solid rgba(255,255,255,0.1)',
+          background: 'linear-gradient(135deg, #1E293B, #0F172A)',
+          border: '1px solid rgba(99,102,241,0.3)',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+          boxShadow: '0 4px 16px rgba(99,102,241,0.2)',
+          transition: 'all 0.2s ease',
         }}
         title="Take app tour"
       >

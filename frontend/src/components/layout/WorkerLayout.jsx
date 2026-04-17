@@ -53,12 +53,12 @@ function Sidebar({ onClose }) {
       style={{
         width: 240,
         background: 'var(--bg-card)',
-        borderRight: '1px solid var(--border-light)',
+        borderRight: '1px solid var(--border)',
         padding: '24px 12px',
       }}
     >
       <div className="flex items-center gap-2 px-3 mb-8">
-        <span style={{ fontFamily: 'Barlow, sans-serif', fontSize: 24, fontWeight: 400, color: 'white', letterSpacing: '-0.02em', paddingTop: 8, paddingBottom: 8 }}>
+        <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 22, fontWeight: 800, color: '#A5B4FC', letterSpacing: '-0.03em', paddingTop: 8, paddingBottom: 8 }}>
           ShieldX
         </span>
         {onClose && (
@@ -82,8 +82,8 @@ function Sidebar({ onClose }) {
               onClick={() => { navigate(item.path); onClose?.() }}
               className="flex items-center gap-3 px-3 py-3 rounded-[10px] w-full text-left transition-colors"
               style={{
-                background: active ? 'var(--brand-light)' : 'transparent',
-                color: active ? 'var(--brand)' : 'var(--text-secondary)',
+                background: active ? 'rgba(99,102,241,0.12)' : 'transparent',
+                color: active ? '#818CF8' : 'var(--text-secondary)',
               }}
             >
               <Icon size={20} strokeWidth={active ? 2.5 : 1.8} />

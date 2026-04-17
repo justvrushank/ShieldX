@@ -5,30 +5,38 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#D97757',
-          light: '#FDF1ED',
-          dark: '#B85C3A',
+          DEFAULT: '#6366F1',
+          light: 'rgba(99,102,241,0.15)',
+          dark: '#4F46E5',
+        },
+        accent: {
+          DEFAULT: '#22D3EE',
+          light: 'rgba(34,211,238,0.12)',
         },
         success: {
-          DEFAULT: '#12B76A',
-          light: '#ECFDF3',
+          DEFAULT: '#22C55E',
+          light: 'rgba(34,197,94,0.12)',
         },
         warning: {
-          DEFAULT: '#F79009',
-          light: '#FFFAEB',
+          DEFAULT: '#F59E0B',
+          light: 'rgba(245,158,11,0.12)',
         },
         danger: {
-          DEFAULT: '#F04438',
-          light: '#FEF3F2',
+          DEFAULT: '#EF4444',
+          light: 'rgba(239,68,68,0.12)',
         },
         grey: {
-          50: '#F7F7F8',
-          100: '#F0F0F2',
-          200: '#E4E4E7',
-          300: '#C4C4C4',
-          400: '#9B9B9B',
-          500: '#6B6B6B',
-          900: '#0F0F0F',
+          50: '#1E293B',
+          100: '#334155',
+          200: '#475569',
+          300: '#64748B',
+          400: '#94A3B8',
+          500: '#CBD5E1',
+          900: '#F1F5F9',
+        },
+        slate: {
+          800: '#1E293B',
+          900: '#0F172A',
         },
       },
       fontFamily: {
@@ -36,9 +44,9 @@ module.exports = {
         body: ['Inter', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 2px 12px rgba(0,0,0,0.06)',
-        md: '0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04)',
-        lg: '0 10px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04)',
+        card: '0 2px 12px rgba(0,0,0,0.4)',
+        md: '0 4px 6px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2)',
+        lg: '0 10px 24px rgba(0,0,0,0.45), 0 4px 8px rgba(0,0,0,0.3)',
       },
       borderRadius: {
         card: '16px',
