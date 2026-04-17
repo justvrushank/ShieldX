@@ -1,8 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Eye, Shield } from 'lucide-react'
 
 export default function AdminLogin() {
+  const navigate = useNavigate()
 
   const enterAdmin = (e) => {
     if (e) e.preventDefault()
@@ -10,7 +12,7 @@ export default function AdminLogin() {
     localStorage.setItem('admin_auth', 'true')
     localStorage.setItem('gp-admin-auth', 'true')
 
-    window.location.href = '/admin'
+    navigate('/admin')
   }
 
   return (
