@@ -15,27 +15,13 @@ export const ZoneMonitor = () => {
   const worker = useWorkerStore(s => s.worker)
   const activePolicy = useWorkerStore(s => s.activePolicy)
   const [lastChecked, setLastChecked] = useState(new Date())
-  const [nextCheckSecs, setNextCheckSecs] = useState(60)
   const [hasAlert, setHasAlert] = useState(false)
   const [alertData, setAlertData] = useState(null)
   const [checking, setChecking] = useState(false)
-  const [checkTimes, setCheckTimes] = useState({})
   const intervalRef = useRef(null)
-  const countdownRef = useRef(null)
 
   const runCheck = async () => {
     setChecking(true)
-    const now = new Date()
-    
-    // Stagger check times for realism
-    const times = {}
-    CHECKS.forEach((check, i) => {
-      setTimeout(() => {
-        times[check.id] = new Date()
-        setCheckTimes(prev => ({ ...prev, [check.id]: new Date() }))
-      }, i * 400)
-    })
-
     try {
       const data = await getActiveTriggers()
       if (data.triggers && data.triggers.length > 0) {
@@ -47,31 +33,22 @@ export const ZoneMonitor = () => {
       }
     } catch (e) {
       setHasAlert(false)
-    }
-
-    setTimeout(() => {
-      setLastChecked(now)
+    } finally {
+      setLastChecked(new Date())
       setChecking(false)
-      setNextCheckSecs(60)
-    }, CHECKS.length * 400 + 200)
+    }
   }
 
   useEffect(() => {
     runCheck()
-    
-    // Poll every 60 seconds
+
+    // Poll every 60 seconds — no countdown state, avoids 1s re-render loop
     intervalRef.current = setInterval(runCheck, 60000)
-    
-    // Countdown timer
-    countdownRef.current = setInterval(() => {
-      setNextCheckSecs(s => s > 0 ? s - 1 : 60)
-    }, 1000)
 
     return () => {
       clearInterval(intervalRef.current)
-      clearInterval(countdownRef.current)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const timeAgo = (date) => {
     if (!date) return '...'
@@ -150,7 +127,7 @@ export const ZoneMonitor = () => {
             fontFamily: 'Inter',
             color: 'var(--text-tertiary)',
           }}>
-            {checking ? 'Checking...' : `Next: ${nextCheckSecs}s`}
+            {checking ? 'Checking...' : `Checked ${timeAgo(lastChecked)}`}
           </span>
         </div>
       </div>
@@ -220,7 +197,7 @@ export const ZoneMonitor = () => {
               alignItems: 'center',
               gap: 4,
             }}>
-              {checking && !checkTimes[check.id] ? (
+              {checking ? (
                 <motion.div
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1, repeat: Infinity }}
@@ -241,9 +218,7 @@ export const ZoneMonitor = () => {
                 fontSize: 11, fontFamily: 'Inter',
                 color: 'var(--text-tertiary)',
               }}>
-                {checkTimes[check.id]
-                  ? timeAgo(checkTimes[check.id])
-                  : timeAgo(lastChecked)}
+                {timeAgo(lastChecked)}
               </span>
             </div>
           </div>

@@ -88,7 +88,7 @@ export const LandingNav = () => {
               flexShrink: 0,
             }}
           >
-            <span style={{ fontFamily: 'Barlow, sans-serif', fontSize: 24, fontWeight: 400, color: '#D97757', letterSpacing: '-0.02em' }}>
+            <span style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 22, fontWeight: 800, color: '#A5B4FC', letterSpacing: '-0.03em' }}>
               ShieldX
             </span>
           </motion.div>
@@ -156,22 +156,23 @@ export const LandingNav = () => {
 
             <motion.button
               onClick={() => navigate('/register')}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
               whileTap={{ scale: 0.96 }}
               style={{
                 padding: '8px 16px',
                 borderRadius: 999,
                 border: 'none',
-                background: 'white',
+                background: 'linear-gradient(135deg, #6366F1, #4F46E5)',
                 fontSize: 13,
                 fontWeight: 700,
                 fontFamily: 'Inter',
-                color: '#D97757',
+                color: 'white',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                boxShadow: '0 2px 12px rgba(99,102,241,0.4)',
                 animation: 'pulseGlow 2s ease-in-out infinite',
                 position: 'relative',
+                transition: 'all 0.2s ease',
               }}
             >
               {/* Green notification dot */}
@@ -180,8 +181,8 @@ export const LandingNav = () => {
                 top: -2, right: -2,
                 width: 8, height: 8,
                 borderRadius: 999,
-                background: '#12B76A',
-                border: '1.5px solid white',
+                background: '#22C55E',
+                border: '1.5px solid rgba(255,255,255,0.3)',
                 animation: 'pulse 2s ease-in-out infinite',
               }} />
               Get protected →
@@ -324,12 +325,13 @@ export const LandingNav = () => {
                   whileTap={{ scale: 0.97 }}
                   style={{
                     width: '100%', padding: '13px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     border: 'none',
-                    background: 'white',
+                    background: 'linear-gradient(135deg, #6366F1, #4F46E5)',
                     fontSize: 15, fontWeight: 700,
                     fontFamily: 'Inter',
-                    color: '#D97757', cursor: 'pointer',
+                    color: 'white', cursor: 'pointer',
+                    boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
                   }}
                 >
                   Get protected →
