@@ -96,15 +96,21 @@ function AdminSidebar({ onClose }) {
       {/* Nav */}
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {ADMIN_NAV.map(item => {
-          const active = item.path === '/admin' 
-            ? location.pathname === '/admin' 
-            : location.pathname.startsWith(item.path)
+          const active = item.path === '/admin'
+            ? location.pathname === '/admin'
+            : location.pathname === item.path || location.pathname.startsWith(item.path + '/')
+            
           const Icon = item.icon
           return (
             <motion.button
               key={item.label}
               whileTap={{ scale: 0.97 }}
-              onClick={() => { navigate(item.path); onClose?.() }}
+              onClick={() => { 
+                if (location.pathname !== item.path) {
+                  navigate(item.path)
+                }
+                onClose?.() 
+              }}
               aria-label={item.label}
               aria-current={active ? 'page' : undefined}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-none cursor-pointer w-full text-left transition-all duration-300 ${active ? 'bg-indigo-500/10 text-indigo-400' : 'bg-transparent text-slate-400 hover:bg-slate-800 hover:text-slate-300'}`}
@@ -152,8 +158,18 @@ export default function AdminLayout() {
     return <Navigate to="/admin/login" replace />
   }
 
-  const parentPath = '/' + location.pathname.split('/').slice(1, 3).join('/')
-  const pageTitle = PAGE_TITLES[location.pathname] || PAGE_TITLES[parentPath] || 'Admin'
+  // Robust nested title lookup
+  let pageTitle = 'Admin'
+  const segments = location.pathname.split('/').filter(Boolean)
+  while (segments.length > 0) {
+    const checkPath = '/' + segments.join('/')
+    if (PAGE_TITLES[checkPath]) {
+      pageTitle = PAGE_TITLES[checkPath]
+      break
+    }
+    segments.pop()
+  }
+
   const breadcrumb = `Admin / ${pageTitle}`
 
   const handleRefresh = () => {
