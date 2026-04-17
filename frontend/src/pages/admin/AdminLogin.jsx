@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Shield } from 'lucide-react'
@@ -32,8 +32,8 @@ export default function AdminLogin() {
       localStorage.setItem('gp-admin-user', data.username || username)
       navigate('/admin', { replace: true })
     } catch (err) {
-      // Backend unavailable — allow demo credentials admin/admin
-      if (username.trim() === 'admin' && password === 'admin') {
+      // Backend unavailable — allow demo credentials admin/admin ONLY in development
+      if (import.meta.env.DEV && username.trim() === 'admin' && password === 'admin') {
         localStorage.setItem('gp-admin-auth', JSON.stringify({
           authenticated: true,
           username: 'admin',
