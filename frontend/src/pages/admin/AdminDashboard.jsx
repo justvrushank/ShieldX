@@ -16,12 +16,6 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [quickSimming, setQuickSimming] = useState(null)
 
-  useEffect(() => {
-    if (localStorage.getItem('admin_auth') !== 'true') {
-      window.location.href = '/admin/login'
-    }
-  }, [])
-
   const openPayoutModal = useDemoStore((s) => s.openPayoutModal)
   const addActivity = useDemoStore((s) => s.addActivity)
   const setLastSimPayout = useDemoStore((s) => s.setLastSimPayout)

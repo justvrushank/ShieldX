@@ -1,4 +1,4 @@
-﻿import axios from 'axios'
+import axios from 'axios'
 
 const rawApiUrl = import.meta.env.VITE_API_URL
 const isPlaceholderUrl =
@@ -63,7 +63,7 @@ const errorHandler = (isAdmin) => (error) => {
     if (isAdmin) {
       localStorage.removeItem('gp-admin-token')
       localStorage.removeItem('gp-admin-access-token')
-      if (!window.location.pathname.includes('/admin/login')) window.location.href = '/admin/login'
+      if (!window.location.pathname.includes('/admin')) window.location.href = '/admin'
     } else {
       localStorage.removeItem('gp-token')
       localStorage.removeItem('gp-access-token')

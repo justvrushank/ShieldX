@@ -31,42 +31,7 @@ const PAGE_TITLES = {
 /* ── Shared focus ring utility class (Tailwind) ── */
 const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900'
 
-/* ── Safe base64url JWT parser ── */
-function safelyParseJwt(token) {
-  try {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-    }).join(''))
-    return JSON.parse(jsonPayload)
-  } catch (e) {
-    return null
-  }
-}
 
-/* ── Auth guard (no gp-admin-auth trust in production) ── */
-function checkAdminAuthSecurely() {
-  const token = localStorage.getItem('gp-admin-token') || localStorage.getItem('gp-admin-access-token')
-  const authRaw = localStorage.getItem('gp-admin-auth')
-  const isDevAuth = import.meta.env.DEV && authRaw && (() => {
-    try { return JSON.parse(authRaw)?.authenticated === true } catch { return false }
-  })()
-
-  if (!token && !isDevAuth) return false
-
-  if (token) {
-    const payload = safelyParseJwt(token)
-    if (!payload || (payload.exp && payload.exp * 1000 < Date.now())) {
-      localStorage.removeItem('gp-admin-token')
-      localStorage.removeItem('gp-admin-access-token')
-      localStorage.removeItem('gp-admin-auth')
-      localStorage.removeItem('gp-admin-user')
-      return false
-    }
-  }
-  return true
-}
 
 /* ── Route matching helper ── */
 function isRouteActive(itemPath, currentPath) {
@@ -168,10 +133,7 @@ export default function AdminLayout() {
   const navigate = useNavigate()
   const drawerRef = useRef(null)
 
-  // ─── Auth gate ───
-  if (!checkAdminAuthSecurely()) {
-    return <Navigate to="/admin/login" replace />
-  }
+
 
   // ─── Escape key closes drawer ───
   useEffect(() => {
@@ -255,7 +217,7 @@ export default function AdminLayout() {
     localStorage.removeItem('gp-admin-access-token')
     localStorage.removeItem('gp-admin-auth')
     localStorage.removeItem('gp-admin-user')
-    navigate('/admin/login', { replace: true })
+    navigate('/admin', { replace: true })
   }, [navigate])
 
   return (
