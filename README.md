@@ -1,6 +1,4 @@
-<div align="center">
 
-<img src="https://res.cloudinary.com/dqwm8wgg8/image/upload/v1775229340/u4qsxq76ijd9vw6yjhwj.gif" height="220" width="310" alt="ShieldX Ecosystem"/>
 
 # 🛡️ ShieldX
 
