@@ -9,9 +9,7 @@ import { AnimatedBackground } from './components/ui/AnimatedBackground'
 
 // Eager-loaded routes (landing + auth)
 import Landing from './pages/Landing'
-import Login from './pages/worker/Login'
-import Register from './pages/worker/Register'
-import CompleteProfile from './pages/worker/CompleteProfile'
+import WorkerDashboard from './pages/worker/WorkerDashboard'
 
 // Lazy-loaded routes
 const Onboarding = lazy(() => import('./pages/Onboarding'))
@@ -99,40 +97,12 @@ function AppRoutes() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-        <Route path="/complete-profile" element={<CompleteProfile />} />
-        <Route path="/otp" element={<PublicRoute><OTP /></PublicRoute>} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/onboarding" element={<Onboarding />} />
+        {/* Worker Dashboard Demo */}
+        <Route path="/worker" element={<WorkerDashboard />} />
 
         {/* Legal — accessible always */}
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
-
-        {/* Protected worker routes — nested under WorkerLayout */}
-        <Route element={<WorkerLayout />}>
-          <Route path="/zone"           element={<ZoneSelect />} />
-          <Route path="/risk-score"     element={<RiskScore />} />
-          <Route path="/forecast"       element={<AIForecast />} />
-          <Route path="/premium"        element={<Premium />} />
-          <Route path="/coverage"       element={<Coverage />} />
-          <Route path="/worker"         element={<Dashboard />} />
-          <Route path="/dashboard"      element={<Navigate to="/worker" replace />} />
-          <Route path="/claim/:id"      element={<ClaimStatus />} />
-          <Route path="/payout-success" element={<PayoutSuccess />} />
-          <Route path="/payout/:claimId" element={<PayoutReceipt />} />
-          <Route path="/profile"        element={<Profile />} />
-          <Route path="/claims"         element={<ClaimsList />} />
-          <Route path="/notifications"  element={<NotificationsPage />} />
-          <Route path="/earnings"       element={<EarningsShield />} />
-          <Route path="/earnings-intelligence" element={<EarningsIntelligence />} />
-          <Route path="/zone-intel"     element={<ZoneIntel />} />
-          <Route path="/community"      element={<CommunityStats />} />
-          <Route path="/assistant"      element={<CoverageAssistant />} />
-          <Route path="/support"        element={<Support />} />
-          <Route path="/how-it-works"   element={<HowItWorks />} />
-        </Route>
 
 
         {/* Admin routes — nested under AdminLayout */}

@@ -199,7 +199,7 @@ const Landing = () => {
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
               <motion.button
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/worker')}
                 whileHover={{ scale: 1.05, filter: 'brightness(1.1)' }}
                 whileTap={{ scale: 0.97 }}
                 style={{
@@ -571,7 +571,7 @@ const Landing = () => {
                   ))}
                 </div>
                 <motion.button
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/worker')}
                   whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
                   whileTap={{ scale: 0.97 }}
                   style={{ width: '100%', marginTop: 24, padding: '13px', borderRadius: 12, border: plan.popular ? 'none' : '1.5px solid #334155', background: plan.popular ? 'linear-gradient(135deg,#6366F1,#4F46E5)' : 'transparent', color: plan.popular ? 'white' : '#CBD5E1', fontSize: 14, fontWeight: 700, fontFamily: 'Inter, sans-serif', cursor: 'pointer', boxShadow: plan.popular ? '0 4px 16px rgba(99,102,241,0.4)' : 'none', transition: 'all 0.2s ease' }}
@@ -662,7 +662,7 @@ const Landing = () => {
             Join delivery workers across India already running ShieldX. Real-time risk coverage from ₹49/week.
           </p>
           <motion.button
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/worker')}
             whileHover={{ scale: 1.03, filter: 'brightness(1.1)' }}
             whileTap={{ scale: 0.97 }}
             style={{ padding: '16px 36px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #6366F1, #4F46E5)', color: 'white', fontSize: 16, fontWeight: 700, fontFamily: 'Inter, sans-serif', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 20px rgba(99,102,241,0.45)', transition: 'all 0.2s ease' }}

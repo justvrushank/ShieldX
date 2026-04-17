@@ -135,7 +135,7 @@ export const LandingNav = () => {
             flexShrink: 0,
           }}>
             <motion.button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/worker')}
               className="nav-cta-desktop"
               whileTap={{ scale: 0.96 }}
               style={{
@@ -155,7 +155,7 @@ export const LandingNav = () => {
             </motion.button>
 
             <motion.button
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/worker')}
               whileHover={{ scale: 1.05, filter: 'brightness(1.1)' }}
               whileTap={{ scale: 0.96 }}
               style={{
@@ -301,7 +301,7 @@ export const LandingNav = () => {
               }}>
                 <motion.button
                   onClick={() => {
-                    navigate('/login')
+                    navigate('/worker')
                     setMobileOpen(false)
                   }}
                   whileTap={{ scale: 0.97 }}
@@ -319,7 +319,7 @@ export const LandingNav = () => {
                 </motion.button>
                 <motion.button
                   onClick={() => {
-                    navigate('/register')
+                    navigate('/worker')
                     setMobileOpen(false)
                   }}
                   whileTap={{ scale: 0.97 }}
