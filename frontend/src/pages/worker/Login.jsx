@@ -175,7 +175,7 @@ export default function Login() {
           </p>
         </motion.div>
 
-        {/* Auth card */}
+        {/* Demo access card */}
         <motion.div
           variants={item}
           className="mx-4 mb-4 rounded-card p-5 lg:mx-0"
@@ -185,134 +185,12 @@ export default function Login() {
             border: '1px solid var(--border-light)',
           }}
         >
-          {/* Google Sign-In */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={handleGoogleLogin}
-            disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 h-[52px] rounded-input font-semibold text-[15px] font-body transition-colors"
-            style={{
-              background: 'var(--bg-primary)',
-              border: '1.5px solid var(--border)',
-              color: 'var(--text-primary)',
-              boxShadow: 'var(--shadow-sm)',
-              opacity: googleLoading ? 0.7 : 1,
-              cursor: 'pointer',
-            }}
-          >
-            {googleLoading ? (
-              <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full" style={{ animation: 'spin 0.8s linear infinite' }} />
-            ) : (
-              <GoogleLogo />
-            )}
-            Continue with Google
-          </motion.button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-4">
-            <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-            <span className="text-[13px] font-body" style={{ color: 'var(--text-tertiary)' }}>or</span>
-            <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-          </div>
-
-          {/* Email input */}
-          <label className="block text-[13px] font-medium font-body mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-            Email address
-          </label>
-          <div
-            className="flex items-center rounded-input overflow-hidden h-[52px] transition-all mb-4"
-            style={{ border: error ? '1.5px solid var(--danger)' : '1.5px solid var(--border)' }}
-          >
-            <input
-              type="email"
-              placeholder="ravi@example.com"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); setError('') }}
-              onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
-              className="flex-1 h-full px-4 text-[15px] font-body outline-none"
-              style={{ background: 'transparent', color: 'var(--text-primary)' }}
-            />
-          </div>
-
-          {/* Password input */}
-          <label className="block text-[13px] font-medium font-body mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-            Password
-          </label>
-          <div
-            className="flex items-center rounded-input overflow-hidden h-[52px] transition-all"
-            style={{ border: error ? '1.5px solid var(--danger)' : '1.5px solid var(--border)' }}
-          >
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => { setPassword(e.target.value); setError('') }}
-              onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
-              className="flex-1 h-full px-4 text-[15px] font-body outline-none"
-              style={{ background: 'transparent', color: 'var(--text-primary)' }}
-            />
-          </div>
-
-          <AnimatePresence>
-            {error && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-[12px] mt-1.5 font-body"
-                style={{ color: 'var(--danger)' }}
-              >
-                {error}
-              </motion.p>
-            )}
-          </AnimatePresence>
-
-          <div className="mt-5">
-            <Button onClick={handleEmailLogin} loading={loading} fullWidth>
-              Access system →
+          <div className="mt-2">
+            <Button onClick={() => navigate('/worker')} fullWidth>
+              Enter as Demo Worker →
             </Button>
           </div>
         </motion.div>
-
-        {/* Sign up link */}
-        <motion.p
-          variants={item}
-          className="px-6 pb-2 text-center text-[14px] font-body"
-          style={{ color: 'var(--text-secondary)' }}
-        >
-          Don't have an account?{' '}
-          <span
-            onClick={() => navigate('/register')}
-            style={{
-              color: 'var(--brand)',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            Sign up
-          </span>
-        </motion.p>
-
-        <motion.p
-          variants={item}
-          className="px-6 pb-6 text-center text-[12px] font-body"
-          style={{ color: 'var(--text-tertiary)' }}
-        >
-          By continuing, you agree to our{' '}
-          <span
-            onClick={() => navigate('/terms')}
-            style={{ color: 'var(--brand)', cursor: 'pointer' }}
-          >
-            Terms
-          </span>
-          {' '}&amp;{' '}
-          <span
-            onClick={() => navigate('/privacy')}
-            style={{ color: 'var(--brand)', cursor: 'pointer' }}
-          >
-            Privacy Policy
-          </span>
-        </motion.p>
       </motion.div>
     </div>
   )

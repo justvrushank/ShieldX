@@ -57,96 +57,79 @@ export default function Dashboard() {
   const [downloadLoading, setDownloadLoading] = useState(false)
   const [toast, setToast] = useState(null)
 
-  // Fetch real data on mount
+  // Mock data setup
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('gp-access-token') || localStorage.getItem('gp-token')
-        if (!token) return
-
-        const [profile, claimsRes] = await Promise.all([
-          getMyProfile(),
-          getMyClaims(null, 5, 0).catch(() => ({ claims: [] })),
-        ])
-
-        if (profile) {
-          if (!profile.city || !profile.zone) {
-            navigate('/complete-profile', { replace: true })
-            return
-          }
-          setProfileData(profile)
-          setWorker({
-            ...worker,
-            name: profile.name,
-            phone: profile.phone,
-            city: profile.city,
-            zone: profile.zone,
-            riskScore: profile.risk_score,
-            riskTier: profile.risk_tier,
-            premium: profile.premium_amount,
-            coverageCap: 600,
-          })
-          if (profile.active_policy) {
-            setActivePolicy({
-              policyId: profile.active_policy._id || profile.active_policy.id,
-              planId: profile.active_policy.plan_id,
-              planName: profile.active_policy.plan_name,
-              price: profile.active_policy.weekly_premium,
-              coverage: profile.active_policy.coverage_cap || 600,
-              weekStart: profile.active_policy.week_start,
-              weekEnd: profile.active_policy.week_end,
-              paymentId: profile.active_policy.payment_id,
-              status: profile.active_policy.status,
-            })
-          }
-        }
-
-        if (claimsRes?.claims) {
-          setClaims(claimsRes.claims)
-          prevClaimCountRef.current = claimsRes.claims.length
-        }
-      } catch (e) {
-        console.warn('[Dashboard] Profile fetch failed, using store data:', e.message)
+    const mockUser = {
+      name: "Ravi Kumar",
+      city: "Chennai",
+      earnings: 1200,
+      active: true,
+      // Extrapolated for dashboard requirements
+      phone: "+91 9876543210",
+      zone: "tnagar-chennai",
+      risk_score: 85,
+      risk_tier: "LOW",
+      premium_amount: 49,
+      active_policy: {
+        id: "pol-123",
+        plan_id: "plan-standard",
+        plan_name: "Standard Shield",
+        weekly_premium: 49,
+        coverage_cap: 1200,
+        week_start: new Date().toISOString(),
+        week_end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        payment_id: "pay-123",
+        status: "ACTIVE"
+      },
+      stats: {
+        total_claims: 1,
+        total_payouts: 450
       }
-    }
-    fetchData()
-  }, [])
+    };
 
-  // Fetch zone forecast for real alert data
-  useEffect(() => {
-    const fetchAlert = async () => {
-      try {
-        const token = localStorage.getItem('gp-access-token') || localStorage.getItem('gp-token')
-        if (!token) return
-        const data = await getMyZoneForecast()
-        if (data?.prediction) {
-          setZoneAlert({
-            probability: Math.round(data.prediction.probability * 100),
-            zone: data.zone || worker?.zone || 'Your zone',
-            autoExtended: data.auto_cover_extended,
-          })
-        }
-      } catch (e) {
-        // Silent — alert banner just won't show live data
-      }
-    }
-    fetchAlert()
-  }, [])
+    setProfileData(mockUser);
+    setWorker({
+        ...worker,
+        name: mockUser.name,
+        phone: mockUser.phone,
+        city: mockUser.city,
+        zone: mockUser.zone,
+        riskScore: mockUser.risk_score,
+        riskTier: mockUser.risk_tier,
+        premium: mockUser.premium_amount,
+        coverageCap: mockUser.active_policy.coverage_cap,
+    });
+    
+    setActivePolicy({
+        policyId: mockUser.active_policy.id,
+        planId: mockUser.active_policy.plan_id,
+        planName: mockUser.active_policy.plan_name,
+        price: mockUser.active_policy.weekly_premium,
+        coverage: mockUser.active_policy.coverage_cap,
+        weekStart: mockUser.active_policy.week_start,
+        weekEnd: mockUser.active_policy.week_end,
+        paymentId: mockUser.active_policy.payment_id,
+        status: mockUser.active_policy.status,
+    });
 
-  // Fetch wellness score
-  useEffect(() => {
-    const fetchWellness = async () => {
-      try {
-        const token = localStorage.getItem('gp-access-token') || localStorage.getItem('gp-token')
-        if (!token) return
-        const data = await getWellnessScore()
-        if (data?.score !== undefined) setWellnessData(data)
-      } catch (e) {
-        // Silent fallback
-      }
-    }
-    fetchWellness()
-  }, [])
+    const mockClaims = [
+        { id: "claim-1", status: "PAID", type: "FLOOD", event: "Flood payout", amount: 450, date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() }
+    ];
+    setClaims(mockClaims);
+    prevClaimCountRef.current = mockClaims.length;
+
+    setZoneAlert({
+        probability: 15,
+        zone: mockUser.zone,
+        autoExtended: false,
+    });
+
+    setWellnessData({
+        score: 92,
+        grade: 'A',
+        tip: 'Perfect attendance this week.'
+    });
+  }, []);
 
   useEffect(() => {
     if (!toast) return undefined
@@ -202,22 +185,7 @@ export default function Dashboard() {
   }, [showAlert, zoneAlert])
 
   useEffect(() => {
-    if (!activePolicy) return
-
-    const poll = async () => {
-      try {
-        const data = await getMyClaims(null, 5, 0)
-        if (data?.claims?.length > prevClaimCountRef.current) {
-          const newClaim = data.claims[0]
-          setNewClaimAlert(newClaim)
-          setClaims(data.claims)
-          prevClaimCountRef.current = data.claims.length
-        }
-      } catch (e) {}
-    }
-
-    const interval = setInterval(poll, 20000)
-    return () => clearInterval(interval)
+    // Polling removed for demo environment
   }, [activePolicy])
 
   // React to admin simulation — show as new payout banner in worker dashboard

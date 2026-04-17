@@ -67,20 +67,10 @@ function getNearestCity(lat, lng) {
 }
 
 function ProtectedRoute({ children }) {
-  const isAuthenticated = useWorkerStore((s) => s.isAuthenticated)
-  const logout = useWorkerStore((s) => s.logout)
-  const token = localStorage.getItem('gp-token') || localStorage.getItem('gp-access-token')
-  if (!isAuthenticated || !token) {
-    if (isAuthenticated && !token) logout()
-    return <Navigate to="/login" replace />
-  }
   return children
 }
 
 function PublicRoute({ children }) {
-  const isAuthenticated = useWorkerStore((s) => s.isAuthenticated)
-  const token = localStorage.getItem('gp-token') || localStorage.getItem('gp-access-token')
-  if (isAuthenticated && token) return <Navigate to="/dashboard" replace />
   return children
 }
 
@@ -121,19 +111,14 @@ function AppRoutes() {
         <Route path="/privacy" element={<Privacy />} />
 
         {/* Protected worker routes — nested under WorkerLayout */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <WorkerLayout />
-            </ProtectedRoute>
-          }
-        >
+        <Route element={<WorkerLayout />}>
           <Route path="/zone"           element={<ZoneSelect />} />
           <Route path="/risk-score"     element={<RiskScore />} />
           <Route path="/forecast"       element={<AIForecast />} />
           <Route path="/premium"        element={<Premium />} />
           <Route path="/coverage"       element={<Coverage />} />
-          <Route path="/dashboard"      element={<Dashboard />} />
+          <Route path="/worker"         element={<Dashboard />} />
+          <Route path="/dashboard"      element={<Navigate to="/worker" replace />} />
           <Route path="/claim/:id"      element={<ClaimStatus />} />
           <Route path="/payout-success" element={<PayoutSuccess />} />
           <Route path="/payout/:claimId" element={<PayoutReceipt />} />
