@@ -9,42 +9,11 @@ export default function AdminLogin() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    if (!username.trim() || !password.trim()) {
-      setError('Please enter username and password')
-      return
-    }
-    setLoading(true)
-    try {
-      const data = await adminLogin(username, password)
-      localStorage.setItem('gp-admin-token', data.access_token)
-      localStorage.setItem('gp-admin-access-token', data.access_token)
-      localStorage.setItem('gp-admin-auth', JSON.stringify({
-        authenticated: true,
-        username: username.trim(),
-        loginAt: new Date().toISOString(),
-      }))
-      localStorage.setItem('gp-admin-user', data.username || username)
-      navigate('/admin', { replace: true })
-    } catch (err) {
-      // Backend unavailable — allow demo credentials admin/admin ONLY in development
-      if (import.meta.env.DEV && username.trim() === 'admin' && password === 'admin') {
-        localStorage.setItem('gp-admin-auth', JSON.stringify({
-          authenticated: true,
-          username: 'admin',
-          loginAt: new Date().toISOString(),
-        }))
-        navigate('/admin', { replace: true })
-        return
-      }
-      setError(err?.detail || 'Incorrect login details')
-      setLoading(false)
-    }
+  const enterAdmin = () => {
+    localStorage.setItem('admin_auth', 'true')
+    localStorage.setItem('gp-admin-auth', 'true')
+    navigate('/admin', { replace: true })
   }
 
   return (
@@ -118,7 +87,7 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <form onSubmit={(e) => { e.preventDefault(); enterAdmin(); }} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Username */}
           <div>
             <label style={{
@@ -192,34 +161,23 @@ export default function AdminLogin() {
             </div>
           </div>
 
-          {error && (
-            <p style={{
-              fontSize: 13, fontFamily: 'Inter', color: '#F04438',
-              background: 'rgba(240,68,56,0.08)',
-              border: '1px solid rgba(240,68,56,0.2)',
-              borderRadius: 8, padding: '8px 12px', textAlign: 'center',
-            }}>
-              {error}
-            </p>
-          )}
-
           <motion.button
-            type="submit"
-            disabled={loading}
+            type="button"
+            onClick={enterAdmin}
             whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
             whileTap={{ scale: 0.97 }}
             style={{
               width: '100%', height: 48, marginTop: 4,
-              background: loading ? '#2A2A2A' : 'linear-gradient(135deg, var(--brand), var(--brand-dark))',
+              background: 'linear-gradient(135deg, var(--brand), var(--brand-dark))',
               border: 'none', borderRadius: 12,
               fontSize: 15, fontWeight: 700, fontFamily: 'Inter',
-              color: loading ? '#6B6B6B' : 'white',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              color: 'white',
+              cursor: 'pointer',
               transition: 'background 0.15s',
               boxShadow: 'var(--shadow-brand)',
             }}
           >
-            {loading ? 'Authenticating...' : 'Access system →'}
+            Access system →
           </motion.button>
         </form>
 
@@ -227,15 +185,7 @@ export default function AdminLogin() {
           type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => {
-            localStorage.setItem('gp-admin-auth', JSON.stringify({
-              authenticated: true,
-              username: 'admin',
-              loginAt: new Date().toISOString(),
-            }))
-            localStorage.setItem('admin_auth', 'true')
-            navigate('/admin', { replace: true })
-          }}
+          onClick={enterAdmin}
           style={{
             marginTop: 16, width: '100%',
             padding: '12px 14px', cursor: 'pointer',
