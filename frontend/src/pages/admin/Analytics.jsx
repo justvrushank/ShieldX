@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  BarChart, Bar, LineChart, Line, AreaChart, Area,
+  BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
 } from 'recharts'
@@ -15,51 +15,27 @@ const pageVariants = {
   exit: { opacity: 0, y: -8, transition: { duration: 0.12 } },
 }
 
-const ADMIN_TABS = [
-  { id: 'overview',  label: 'Overview',  path: '/admin' },
-  { id: 'claims',    label: 'Claims',    path: '/admin/claims' },
-  { id: 'analytics', label: 'Analytics', path: '/admin/analytics' },
-]
-
-function AdminBottomNav({ active }) {
-  const navigate = useNavigate()
-  return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-white border-t border-grey-200">
-      <div className="flex h-14">
-        {ADMIN_TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => navigate(tab.path)}
-            className={`flex-1 flex items-center justify-center text-[13px] font-semibold font-body transition-colors ${active === tab.id ? 'text-brand border-t-2 border-brand' : 'text-grey-400'}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const tooltipStyle = {
   contentStyle: {
-    background: '#fff',
-    border: '1px solid #E4E4E7',
+    background: '#1e293b', // bg-slate-800
+    border: '1px solid #334155', // border-slate-700
     borderRadius: 8,
-    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
     fontFamily: 'Inter',
     fontSize: 13,
+    color: '#f8fafc', // text-slate-50
   },
 }
 
 const axisStyle = {
-  tick: { fill: '#9B9B9B', fontSize: 11, fontFamily: 'Inter' },
-  stroke: '#E4E4E7',
+  tick: { fill: '#64748b', fontSize: 11, fontFamily: 'Inter' }, // text-slate-500
+  stroke: '#334155', // border-slate-700
 }
 
 function ChartCard({ title, children }) {
   return (
-    <div className="mx-4 bg-white rounded-card shadow-card p-4">
-      <p className="text-[14px] font-semibold font-body text-[#0F0F0F] mb-4">{title}</p>
+    <div className="mx-4 bg-slate-800 border border-slate-700 rounded-xl shadow-sm p-5 hover:-translate-y-1 transition-all duration-300">
+      <p className="text-sm font-bold font-display text-white mb-4 tracking-wide">{title}</p>
       {children}
     </div>
   )
@@ -112,7 +88,6 @@ export default function Analytics() {
         })
         setLossRatioData(lossData)
       } else {
-        // Fallback demo charts if no actual chart records exist
         setPremiumPayoutData([
           { week: 'W1', premium: 54000, payout: 19000 },
           { week: 'W2', premium: 51000, payout: 22000 },
@@ -134,39 +109,38 @@ export default function Analytics() {
   }
 
   return (
-    <motion.div className="min-h-screen bg-grey-50 pb-24" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      <TopBar title="Actuarial Analytics" bgClass="bg-grey-50" />
-
+    <motion.div className="min-h-screen bg-slate-900 pb-24 text-slate-200" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      {/* TopBar equivalent if required, although omitted for spacing if embedded inside AdminLayout */}
+      
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
-          <div style={{ width: 28, height: 28, border: '3px solid #E4E4E7', borderTopColor: '#D97757', borderRadius: 999, animation: 'spin 0.8s linear infinite' }} />
+          <div className="w-8 h-8 rounded-full border-4 border-slate-700 border-t-indigo-500 animate-spin" />
         </div>
       ) : (
-        <div className="mt-3 flex flex-col gap-3">
+        <div className="mt-4 flex flex-col gap-6">
           
-          {/* Fraud Analytics Component */}
           {fraudData && (
             <>
               {/* Summary Row */}
               <div className="px-4">
-                <div className="bg-white rounded-card shadow-card p-4">
-                  <p className="text-[14px] font-semibold font-body text-[#0F0F0F] mb-3">Pipeline Integrity</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-grey-50 rounded-[8px] p-3 text-center">
-                      <p className="text-[11px] font-bold text-grey-500 uppercase tracking-wider mb-1">Total Analyzed</p>
-                      <p className="font-display font-bold text-[20px] text-[#0F0F0F]">{fraudData.summary.total_claims_analyzed}</p>
+                <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm p-5 hover:-translate-y-1 transition-all duration-300">
+                  <p className="text-sm font-bold font-display text-white mb-4 tracking-wide">Pipeline Integrity</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 text-center">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Analyzed</p>
+                      <p className="font-display font-bold text-2xl text-white">{fraudData.summary.total_claims_analyzed}</p>
                     </div>
-                    <div className="bg-danger-light border border-danger/20 rounded-[8px] p-3 text-center">
-                      <p className="text-[11px] font-bold text-danger uppercase tracking-wider mb-1">Flagged</p>
-                      <p className="font-display font-bold text-[20px] text-danger">{fraudData.summary.flagged_for_review}</p>
+                    <div className="bg-rose-500/10 border border-rose-500/20 rounded-lg p-3 text-center">
+                      <p className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Flagged</p>
+                      <p className="font-display font-bold text-2xl text-rose-400">{fraudData.summary.flagged_for_review}</p>
                     </div>
-                    <div className="bg-success-light border border-success/20 rounded-[8px] p-3 text-center">
-                      <p className="text-[11px] font-bold text-success uppercase tracking-wider mb-1">Auto-Approved</p>
-                      <p className="font-display font-bold text-[20px] text-success">{fraudData.summary.auto_approved}</p>
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3 text-center">
+                      <p className="text-[10px] font-bold text-green-400 uppercase tracking-widest mb-1">Auto-Approved</p>
+                      <p className="font-display font-bold text-2xl text-green-400">{fraudData.summary.auto_approved}</p>
                     </div>
-                    <div className="bg-grey-50 rounded-[8px] p-3 text-center">
-                      <p className="text-[11px] font-bold text-grey-500 uppercase tracking-wider mb-1">Detection Rate</p>
-                      <p className="font-display font-bold text-[20px] text-[#0F0F0F]">{fraudData.summary.fraud_detection_rate}%</p>
+                    <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 text-center">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Detection Rate</p>
+                      <p className="font-display font-bold text-2xl text-white">{fraudData.summary.fraud_detection_rate}%</p>
                     </div>
                   </div>
                 </div>
@@ -174,61 +148,61 @@ export default function Analytics() {
 
               {/* Signals Breakdown */}
               <ChartCard title="Telemetry Red Flags">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="border border-grey-100 rounded-[8px] p-3 flex items-start justify-between">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 flex items-start justify-between">
                     <div>
-                      <p className="text-[20px]">🛰️</p>
-                      <p className="text-[11px] font-bold text-grey-500 uppercase mt-1 leading-tight">GPS Spoofing<br/>Attempts</p>
+                      <p className="text-xl">🛰️</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase mt-2 leading-tight tracking-wider">GPS Spoofing<br/>Attempts</p>
                     </div>
-                    <span className="font-display font-bold text-[18px] text-[#0F0F0F]">{fraudData.signal_breakdown.gps_spoofing_attempts}</span>
+                    <span className="font-display font-bold text-xl text-white">{fraudData.signal_breakdown.gps_spoofing_attempts}</span>
                   </div>
-                  <div className="border border-grey-100 rounded-[8px] p-3 flex items-start justify-between">
+                  <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 flex items-start justify-between">
                     <div>
-                      <p className="text-[20px]">🌧️</p>
-                      <p className="text-[11px] font-bold text-grey-500 uppercase mt-1 leading-tight">Weather<br/>Mismatches</p>
+                      <p className="text-xl">🌧️</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase mt-2 leading-tight tracking-wider">Weather<br/>Mismatches</p>
                     </div>
-                    <span className="font-display font-bold text-[18px] text-[#0F0F0F]">{fraudData.signal_breakdown.weather_validation_failures}</span>
+                    <span className="font-display font-bold text-xl text-white">{fraudData.signal_breakdown.weather_validation_failures}</span>
                   </div>
-                  <div className="border border-grey-100 rounded-[8px] p-3 flex items-start justify-between">
+                  <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 flex items-start justify-between">
                     <div>
-                      <p className="text-[20px]">👤</p>
-                      <p className="text-[11px] font-bold text-grey-500 uppercase mt-1 leading-tight">New Account<br/>Flags</p>
+                      <p className="text-xl">👤</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase mt-2 leading-tight tracking-wider">New Account<br/>Flags</p>
                     </div>
-                    <span className="font-display font-bold text-[18px] text-[#0F0F0F]">{fraudData.signal_breakdown.new_account_flags}</span>
+                    <span className="font-display font-bold text-xl text-white">{fraudData.signal_breakdown.new_account_flags}</span>
                   </div>
-                  <div className="border border-grey-100 rounded-[8px] p-3 flex items-start justify-between">
+                  <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3 flex items-start justify-between">
                     <div>
-                      <p className="text-[20px]">🔄</p>
-                      <p className="text-[11px] font-bold text-grey-500 uppercase mt-1 leading-tight">High Freq.<br/>Claimers</p>
+                      <p className="text-xl">🔄</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase mt-2 leading-tight tracking-wider">High Freq.<br/>Claimers</p>
                     </div>
-                    <span className="font-display font-bold text-[18px] text-[#0F0F0F]">{fraudData.signal_breakdown.high_frequency_claimers}</span>
+                    <span className="font-display font-bold text-xl text-white">{fraudData.signal_breakdown.high_frequency_claimers}</span>
                   </div>
                 </div>
               </ChartCard>
 
               {/* Top Flagged claims */}
-              <div className="mx-4 bg-white rounded-card shadow-card overflow-hidden">
-                <div className="px-4 py-3.5 border-b border-grey-100">
-                  <span className="text-[14px] font-semibold font-body text-[#0F0F0F]">Top Flagged Submissions</span>
+              <div className="mx-4 bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div className="px-5 py-4 border-b border-slate-700/60 flex justify-between items-center bg-slate-800/80">
+                  <span className="text-sm font-bold font-display text-white">Top Flagged Submissions</span>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left" style={{ minWidth: 400 }}>
+                  <table className="w-full text-left whitespace-nowrap">
                     <thead>
-                      <tr className="bg-grey-50 text-[11px] font-semibold text-[#6B6B6B] uppercase tracking-wide">
-                        <th className="px-4 py-3 font-body">Claim ID</th>
-                        <th className="px-4 py-3 font-body">Location</th>
-                        <th className="px-4 py-3 font-body">Trigger</th>
-                        <th className="px-4 py-3 font-body text-right">Fraud Score</th>
+                      <tr className="bg-slate-900/60 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-700/60">
+                        <th className="px-5 py-4">Claim ID</th>
+                        <th className="px-5 py-4">Location</th>
+                        <th className="px-5 py-4">Trigger</th>
+                        <th className="px-5 py-4 text-right">Fraud Score</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-grey-50 text-[13px] font-body text-[#0F0F0F]">
+                    <tbody className="text-sm font-medium text-slate-200">
                       {(fraudData.top_flagged_claims || []).map((claim) => (
-                        <tr key={claim.claim_id}>
-                          <td className="px-4 py-3 font-mono text-[11px] text-grey-500">{claim.claim_id.slice(0, 8)}</td>
-                          <td className="px-4 py-3 font-semibold">{claim.city}</td>
-                          <td className="px-4 py-3 bg-grey-50 rounded italic">{claim.trigger_type}</td>
-                          <td className="px-4 py-3 text-right">
-                            <span className={`px-2 py-1 rounded-[4px] font-bold text-[12px] ${claim.fraud_score > 0.85 ? 'text-white bg-danger' : 'text-[#0F0F0F] bg-warning'}`}>
+                        <tr key={claim.claim_id} className="odd:bg-slate-800 even:bg-slate-900/30 hover:bg-slate-700/50 transition-colors border-b border-slate-700/30 last:border-0">
+                          <td className="px-5 py-3.5 font-mono text-xs text-slate-500">{claim.claim_id.slice(0, 8)}</td>
+                          <td className="px-5 py-3.5 font-semibold text-white">{claim.city}</td>
+                          <td className="px-5 py-3.5"><span className="bg-slate-900/50 border border-slate-700 px-2 py-0.5 rounded text-[11px] font-bold">{claim.trigger_type}</span></td>
+                          <td className="px-5 py-3.5 text-right">
+                            <span className={`px-2 py-1 rounded shadow-sm text-[11px] tracking-wider font-bold border ${claim.fraud_score > 0.85 ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20'}`}>
                               {Math.round(claim.fraud_score * 100)} / 100
                             </span>
                           </td>
@@ -236,7 +210,7 @@ export default function Analytics() {
                       ))}
                       {!fraudData.top_flagged_claims?.length && (
                         <tr>
-                          <td colSpan="4" className="px-4 py-6 text-center text-[13px] text-[#9B9B9B]">No high-risk claims flagged recently.</td>
+                          <td colSpan="4" className="px-5 py-8 text-center text-xs text-slate-500">No high-risk claims flagged recently.</td>
                         </tr>
                       )}
                     </tbody>
@@ -248,39 +222,39 @@ export default function Analytics() {
 
           {/* Chart 1: Premium vs Payouts */}
           <ChartCard title="Premium vs Payouts">
-            <ResponsiveContainer width="100%" height={180}>
+            <ResponsiveContainer width="100%" height={240}>
               <BarChart data={premiumPayoutData} barGap={4}>
-                <CartesianGrid stroke="#F0F0F2" strokeDasharray="none" vertical={false} />
+                <CartesianGrid stroke="#334155" strokeDasharray="4 4" vertical={false} />
                 <XAxis dataKey="week" {...axisStyle} axisLine={false} tickLine={false} />
                 <YAxis {...axisStyle} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}K`} />
                 <Tooltip {...tooltipStyle} formatter={(v) => [`₹${v.toLocaleString('en-IN')}`, '']} />
-                <Bar dataKey="premium" fill="#12B76A" radius={[4, 4, 0, 0]} name="Premium" />
-                <Bar dataKey="payout"  fill="#F79009" radius={[4, 4, 0, 0]} name="Payouts" />
+                <Bar dataKey="premium" fill="#6366f1" radius={[4, 4, 0, 0]} name="Premium" />
+                <Bar dataKey="payout"  fill="#22d3ee" radius={[4, 4, 0, 0]} name="Payouts" />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
 
           {/* Chart 2: Loss ratio trend */}
           <ChartCard title="Loss Ratio Trend">
-            <ResponsiveContainer width="100%" height={160}>
+            <ResponsiveContainer width="100%" height={240}>
               <LineChart data={lossRatioData}>
-                <CartesianGrid stroke="#F0F0F2" strokeDasharray="none" vertical={false} />
+                <CartesianGrid stroke="#334155" strokeDasharray="4 4" vertical={false} />
                 <XAxis dataKey="week" {...axisStyle} axisLine={false} tickLine={false} />
                 <YAxis {...axisStyle} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
                 <Tooltip {...tooltipStyle} formatter={(v) => [`${v}%`, '']} />
                 <Line
                   type="monotone"
                   dataKey="ratio"
-                  stroke="#2E90FA"
-                  strokeWidth={2}
-                  dot={{ fill: '#2E90FA', r: 4 }}
+                  stroke="#22d3ee"
+                  strokeWidth={3}
+                  dot={{ fill: '#22d3ee', r: 5, strokeWidth: 2, stroke: '#1e293b' }}
                   name="Loss Ratio"
                 />
                 <Line
                   type="monotone"
                   dataKey="target"
-                  stroke="#C4C4C4"
-                  strokeWidth={1.5}
+                  stroke="#64748b"
+                  strokeWidth={2}
                   strokeDasharray="4 4"
                   dot={false}
                   name="Target"
@@ -291,7 +265,6 @@ export default function Analytics() {
 
         </div>
       )}
-      <AdminBottomNav active="analytics" />
     </motion.div>
   )
 }
