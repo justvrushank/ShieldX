@@ -1,19 +1,16 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Shield } from 'lucide-react'
-import { adminLogin } from '../../services/api'
+import { Eye, Shield } from 'lucide-react'
 
 export default function AdminLogin() {
-  const navigate = useNavigate()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPass, setShowPass] = useState(false)
 
-  const enterAdmin = () => {
+  const enterAdmin = (e) => {
+    if (e) e.preventDefault()
+
     localStorage.setItem('admin_auth', 'true')
     localStorage.setItem('gp-admin-auth', 'true')
-    navigate('/admin', { replace: true })
+
+    window.location.href = '/admin'
   }
 
   return (
@@ -99,11 +96,8 @@ export default function AdminLogin() {
             </label>
             <input
               type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
               placeholder="admin"
               autoComplete="username"
-              required
               style={{
                 width: '100%', height: 46,
                 background: '#1A1A1A',
@@ -129,12 +123,9 @@ export default function AdminLogin() {
             </label>
             <div style={{ position: 'relative' }}>
               <input
-                type={showPass ? 'text' : 'password'}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                type="password"
                 placeholder="••••••••"
                 autoComplete="current-password"
-                required
                 style={{
                   width: '100%', height: 46,
                   background: '#1A1A1A',
@@ -149,14 +140,13 @@ export default function AdminLogin() {
               />
               <button
                 type="button"
-                onClick={() => setShowPass(!showPass)}
                 style={{
                   position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 4,
                   color: '#6B6B6B',
                 }}
               >
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                <Eye size={16} />
               </button>
             </div>
           </div>
