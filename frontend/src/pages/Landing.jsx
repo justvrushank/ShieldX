@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Zap, ShieldCheck, DollarSign } from 'lucide-react'
 import { LandingNav } from '../components/layout/LandingNav'
 import { LandingFooter } from '../components/layout/LandingFooter'
+import LiveSystemFeed from '../components/ui/LiveSystemFeed'
 
 // ── Video background for hero ──────────────────────────────────────────
 const VideoBackground = () => (
@@ -124,142 +125,147 @@ const Landing = () => {
         <div style={{ position: 'absolute', top: '20%', left: '15%', width: 320, height: 320, borderRadius: 999, background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '25%', right: '10%', width: 260, height: 260, borderRadius: 999, background: 'radial-gradient(circle, rgba(34,211,238,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 900, width: '100%' }}>
-          {/* LIVE badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(99,102,241,0.15)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(99,102,241,0.35)',
-              borderRadius: 999, padding: '6px 16px 6px 8px',
-              marginBottom: 28,
-            }}
-          >
-            <span style={{
-              background: '#22C55E', color: 'white',
-              fontSize: 10, fontWeight: 700, fontFamily: 'Inter, sans-serif',
-              padding: '2px 8px', borderRadius: 999, letterSpacing: '0.5px',
-            }}>LIVE</span>
-            <span style={{ fontSize: 13, fontFamily: 'Inter, sans-serif', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>
-              Guidewire DEVTrails 2026 · Team SentinelX
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, type: 'spring', stiffness: 200, damping: 25 }}
-            style={{
-              fontFamily: 'Bricolage Grotesque, sans-serif',
-              fontSize: 'clamp(40px, 7vw, 80px)',
-              fontWeight: 800, color: 'white',
-              lineHeight: 1.05, letterSpacing: -2,
-              maxWidth: 900, margin: '0 auto 24px',
-              textShadow: '0 2px 40px rgba(0,0,0,0.4)',
-            }}
-          >
-            India's delivery workers<br />
-            <span style={{
-              background: 'linear-gradient(135deg, #A5B4FC, #22D3EE)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              deserve a safety net.
-            </span>
-          </motion.h1>
-
-          {/* Sub */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            style={{
-              fontSize: 'clamp(16px, 2.5vw, 20px)',
-              color: 'rgba(255,255,255,0.7)',
-              fontFamily: 'Inter, sans-serif', lineHeight: 1.6,
-              maxWidth: 540, margin: '0 auto 40px', fontWeight: 400,
-            }}
-          >
-            ShieldX monitors floods, platform outages, and curfews in your zone. When something hits, we pay you automatically — straight to your UPI. No forms. No calls.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}
-          >
-            <motion.button
-              onClick={() => navigate('/register')}
-              whileHover={{ scale: 1.03, filter: 'brightness(1.1)' }}
-              whileTap={{ scale: 0.97 }}
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, width: '100%', display: 'flex', flexDirection: 'row', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}>
+          
+          {/* LEFT: Copy */}
+          <div style={{ flex: '1 1 500px', textAlign: 'left' }}>
+            {/* LIVE badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
               style={{
-                padding: '15px 32px', borderRadius: 14, border: 'none',
-                background: 'linear-gradient(135deg, #6366F1, #4F46E5)',
-                color: 'white', fontSize: 16, fontWeight: 700,
-                fontFamily: 'Inter, sans-serif', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 8,
-                boxShadow: '0 4px 24px rgba(99,102,241,0.45)',
-                transition: 'all 0.2s ease',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'rgba(34,197,94,0.15)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(34,197,94,0.3)',
+                borderRadius: 999, padding: '6px 16px 6px 8px',
+                marginBottom: 28,
               }}
             >
-              Activate ShieldX — from ₹49/week <ArrowRight size={18} />
-            </motion.button>
-            <motion.button
-              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
+              <span style={{
+                background: '#22C55E', color: 'white',
+                fontSize: 10, fontWeight: 700, fontFamily: 'Inter, sans-serif',
+                padding: '2px 8px', borderRadius: 999, letterSpacing: '0.5px',
+              }}>LIVE</span>
+              <span style={{ fontSize: 13, fontFamily: 'Inter, sans-serif', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>
+                System active & monitoring
+              </span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, type: 'spring', stiffness: 200, damping: 25 }}
               style={{
-                padding: '15px 32px', borderRadius: 14,
-                border: '1.5px solid rgba(255,255,255,0.2)',
-                background: 'rgba(255,255,255,0.06)',
-                backdropFilter: 'blur(8px)',
-                color: 'rgba(255,255,255,0.9)', fontSize: 16, fontWeight: 600,
-                fontFamily: 'Inter, sans-serif', cursor: 'pointer',
-                transition: 'all 0.2s ease',
+                fontFamily: 'Bricolage Grotesque, sans-serif',
+                fontSize: 'clamp(40px, 6vw, 72px)',
+                fontWeight: 800, color: 'white',
+                lineHeight: 1.05, letterSpacing: -2,
+                margin: '0 0 24px',
+                textShadow: '0 2px 40px rgba(0,0,0,0.4)',
               }}
             >
-              See how it works
-            </motion.button>
-          </motion.div>
+              Get paid when your<br />
+              <span style={{
+                background: 'linear-gradient(135deg, #22C55E, #16A34A)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                city shuts down.
+              </span>
+            </motion.h1>
 
-          {/* Trust signals */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', marginTop: 32 }}
-          >
-            {['⚡ Paid in under 2 hrs', '🛡️ Covers floods, outages & curfews', '💳 Zero forms or calls'].map(t => (
-              <span key={t} style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter, sans-serif' }}>{t}</span>
-            ))}
-          </motion.div>
+            {/* Sub */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              style={{
+                fontSize: 'clamp(16px, 2.5vw, 20px)',
+                color: 'rgba(255,255,255,0.7)',
+                fontFamily: 'Inter, sans-serif', lineHeight: 1.6,
+                maxWidth: 540, margin: '0 0 40px', fontWeight: 400,
+              }}
+            >
+              ShieldX detects floods, outages, and curfews in real time — and pays you instantly. No forms. No waiting.
+            </motion.p>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            style={{ display: 'flex', gap: 'clamp(24px, 5vw, 64px)', flexWrap: 'wrap', justifyContent: 'center', marginTop: 48 }}
-          >
-            {[
-              { value: '12M+', label: 'Workers unprotected', context: 'across India' },
-              { value: '₹4,200Cr', label: 'Annual income lost', context: 'in uninsured exposure' },
-              { value: '< 2hrs', label: 'Payout speed', context: 'from trigger to UPI' },
-              { value: '₹0', label: 'Forms to file', context: 'ever. fully automated.' },
-            ].map((stat, i) => (
-              <div key={i} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: 'white', margin: 0 }}>{stat.value}</p>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter, sans-serif', margin: '4px 0 0' }}>{stat.label}</p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif', margin: '2px 0 0' }}>{stat.context}</p>
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
+            >
+              <motion.button
+                onClick={() => navigate('/register')}
+                whileHover={{ scale: 1.05, filter: 'brightness(1.1)' }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  padding: '15px 32px', borderRadius: 14, border: 'none',
+                  background: 'linear-gradient(135deg, #22C55E, #16A34A)',
+                  color: 'white', fontSize: 16, fontWeight: 700,
+                  fontFamily: 'Inter, sans-serif', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  boxShadow: '0 4px 24px rgba(34,197,94,0.45)',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Start monitoring <ArrowRight size={18} />
+              </motion.button>
+              <motion.button
+                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  padding: '15px 32px', borderRadius: 14,
+                  border: '1.5px solid rgba(255,255,255,0.2)',
+                  background: 'rgba(255,255,255,0.06)',
+                  backdropFilter: 'blur(8px)',
+                  color: 'rgba(255,255,255,0.9)', fontSize: 16, fontWeight: 600,
+                  fontFamily: 'Inter, sans-serif', cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                See how it works
+              </motion.button>
+            </motion.div>
+
+            {/* System Moment */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              style={{ marginTop: 20 }}
+            >
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.03)', padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22C55E', animation: 'pulse 2s infinite' }}></span>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>Last event:</span> Flood detected in Hyderabad <ArrowRight size={12} style={{ display: 'inline', verticalAlign: 'middle', margin: '0 2px' }} /> <span style={{ color: '#22C55E', fontWeight: 600 }}>₹120 paid</span>
+                </span>
               </div>
-            ))}
-          </motion.div>
+            </motion.div>
+
+            {/* Trust signals */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginTop: 32 }}
+            >
+              {['⚡ Paid instantly', '🛡️ Real-time system monitoring', '💳 Zero forms or calls'].map(t => (
+                <span key={t} style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter, sans-serif' }}>{t}</span>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Live Feed */}
+          <div style={{ flex: '1 1 360px', display: 'flex', justifyContent: 'center' }}>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}>
+               <LiveSystemFeed />
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -281,33 +287,46 @@ const Landing = () => {
             </h2>
           </motion.div>
 
-          {/* Stat cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 2, marginBottom: 80 }}>
-            {[
-              { number: '12M+',     label: 'Uninsured workers',    sub: 'Across Zepto, Swiggy, Blinkit, Amazon', color: '#6366F1', bg: 'rgba(99,102,241,0.08)', r: '16px 0 0 16px' },
-              { number: '₹640',     label: 'Lost per flood day',   sub: 'Average daily income wiped out',          color: '#EF4444', bg: 'rgba(239,68,56,0.08)',  r: 0 },
-              { number: '₹4,200Cr', label: 'Annual income lost',   sub: 'Uninsured exposure across India',         color: '#F59E0B', bg: 'rgba(245,158,11,0.08)',  r: 0 },
-              { number: '0',        label: 'Products exist',       sub: 'No parametric insurance for gig workers', color: '#475569', bg: 'rgba(71,85,105,0.08)', r: '0 16px 16px 0' },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ background: stat.bg, borderColor: `${stat.color}30` }}
-                style={{
-                  padding: 32,
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: stat.r,
-                  transition: 'all 0.2s',
-                }}
-              >
-                <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 52, fontWeight: 800, color: stat.color, margin: '0 0 8px', letterSpacing: -2, lineHeight: 1 }}>{stat.number}</p>
-                <p style={{ fontSize: 16, fontWeight: 600, fontFamily: 'Inter, sans-serif', color: 'white', margin: '0 0 6px' }}>{stat.label}</p>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif', margin: 0, lineHeight: 1.5 }}>{stat.sub}</p>
-              </motion.div>
-            ))}
+          {/* Problem Redesign */}
+          <div style={{ textAlign: 'center', marginBottom: 80 }}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              style={{ background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: 24, padding: '48px 24px', marginBottom: 32, display: 'inline-block', minWidth: '80%' }}
+            >
+              <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 'clamp(48px, 8vw, 84px)', fontWeight: 800, color: '#22C55E', margin: '0 0 16px', letterSpacing: -2, lineHeight: 1 }}>12M+</p>
+              <p style={{ fontSize: 24, fontWeight: 600, fontFamily: 'Inter, sans-serif', color: 'white', margin: 0 }}>workers unprotected</p>
+            </motion.div>
+
+            <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+              {[
+                { number: '₹640', label: 'Lost per flood day', color: '#EF4444' },
+                { number: '₹4,200Cr', label: 'Annual income lost', color: '#F59E0B' }
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  style={{
+                    padding: '24px 32px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: 16,
+                    minWidth: 260
+                  }}
+                >
+                  <p style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 36, fontWeight: 800, color: stat.color, margin: '0 0 4px', letterSpacing: -1 }}>{stat.number}</p>
+                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif', margin: 0 }}>{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <p style={{ fontSize: 18, color: '#94A3B8', fontFamily: 'Inter, sans-serif', maxWidth: 640, margin: '0 auto', lineHeight: 1.6 }}>
+              Existing systems fail gig workers because they rely on slow claims. We replaced claims with automated payouts triggered by real-time data.
+            </p>
           </div>
 
           {/* Ravi's story */}

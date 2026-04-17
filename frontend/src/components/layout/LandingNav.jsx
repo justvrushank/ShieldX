@@ -151,12 +151,12 @@ export const LandingNav = () => {
                 whiteSpace: 'nowrap',
               }}
             >
-              Sign in
+              Access system →
             </motion.button>
 
             <motion.button
               onClick={() => navigate('/register')}
-              whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
+              whileHover={{ scale: 1.05, filter: 'brightness(1.1)' }}
               whileTap={{ scale: 0.96 }}
               style={{
                 padding: '8px 16px',
@@ -185,7 +185,7 @@ export const LandingNav = () => {
                 border: '1.5px solid rgba(255,255,255,0.3)',
                 animation: 'pulse 2s ease-in-out infinite',
               }} />
-              Get protected →
+              Start monitoring →
             </motion.button>
 
             {/* Mobile hamburger */}
@@ -315,7 +315,7 @@ export const LandingNav = () => {
                     color: 'white', cursor: 'pointer',
                   }}
                 >
-                  Sign in
+                  Access system →
                 </motion.button>
                 <motion.button
                   onClick={() => {
@@ -334,7 +334,7 @@ export const LandingNav = () => {
                     boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
                   }}
                 >
-                  Get protected →
+                  Start monitoring →
                 </motion.button>
               </div>
             </motion.div>

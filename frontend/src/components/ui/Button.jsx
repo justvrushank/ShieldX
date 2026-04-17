@@ -29,7 +29,7 @@ export default function Button({
   return (
     <motion.button
       whileTap={disabled || loading ? {} : { scale: 0.97 }}
-      whileHover={disabled || loading ? {} : { scale: 1.01 }}
+      whileHover={disabled || loading ? {} : { scale: 1.05 }}
       className={`${base} ${variants[variant]}`}
       onClick={disabled || loading ? undefined : onClick}
       disabled={disabled || loading}

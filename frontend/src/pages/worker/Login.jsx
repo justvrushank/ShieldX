@@ -81,91 +81,52 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: 'var(--bg-primary)' }}>
-      {/* LEFT: GIF panel — mobile top banner (220px), desktop side panel (full height) */}
+      {/* LEFT: Gradient panel */}
       <div
-        className="w-full lg:w-1/2 lg:min-h-screen relative flex-shrink-0"
+        className="w-full lg:w-1/2 lg:min-h-screen relative flex-shrink-0 flex items-center justify-center p-8"
         style={{
-          height: 220,
-          overflow: 'hidden',
-          background: '#0F0F0F',
+          minHeight: 220,
+          background: 'linear-gradient(135deg, #020617 0%, #0F172A 50%, #0D1117 100%)',
+          borderRight: '1px solid rgba(255,255,255,0.05)',
         }}
       >
-        <img
-          src="https://res.cloudinary.com/dqwm8wgg8/image/upload/v1774181576/yvg6hwnrtbpnaagohbvb.gif"
-          alt="Delivery worker"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.85,
-            position: 'absolute',
-            inset: 0,
-          }}
-        />
-        {/* Gradient overlay — bottom on mobile, right on desktop */}
-        <div
-          className="block lg:hidden"
-          style={{
-            position: 'absolute',
-            bottom: 0, left: 0, right: 0,
-            height: 80,
-            background: 'linear-gradient(to bottom, transparent, var(--bg-primary))',
-          }}
-        />
-        <div
-          className="hidden lg:block"
-          style={{
-            position: 'absolute',
-            top: 0, right: 0, bottom: 0,
-            width: 120,
-            background: 'linear-gradient(to right, transparent, var(--bg-primary))',
-          }}
-        />
-        {/* Logo overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 16, left: 16,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-        }}>
+        {/* Glow orb */}
+        <div style={{ position: 'absolute', top: '30%', left: '20%', width: 300, height: 300, borderRadius: 999, background: 'radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 400, width: '100%' }}>
           <div style={{
-            background: 'rgba(255,255,255,0.15)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            background: 'rgba(255,255,255,0.05)',
             backdropFilter: 'blur(8px)',
-            borderRadius: 10,
-            padding: '6px 12px',
+            borderRadius: 12,
+            padding: '8px 16px',
+            marginBottom: 24,
+            border: '1px solid rgba(255,255,255,0.1)'
           }}>
-            <span style={{ fontFamily: 'Barlow, sans-serif', fontSize: 24, fontWeight: 400, color: 'white', letterSpacing: '-0.02em', paddingTop: 8, paddingBottom: 8 }}>
+            <span style={{ fontFamily: 'Barlow, sans-serif', fontSize: 24, fontWeight: 500, color: 'white', letterSpacing: '-0.02em' }}>
               ShieldX
             </span>
           </div>
-        </div>
 
-        {/* Desktop tagline overlay */}
-        <div
-          className="hidden lg:flex"
-          style={{
-            position: 'absolute',
-            bottom: 40, left: 40, right: 80,
-            flexDirection: 'column',
-            gap: 12,
-          }}
-        >
           <h2 style={{
-            fontFamily: 'Bricolage Grotesque',
-            fontSize: 32, fontWeight: 800,
+            fontFamily: 'Bricolage Grotesque, sans-serif',
+            fontSize: 'clamp(28px, 4vw, 40px)',
+            fontWeight: 800,
             color: 'white',
-            lineHeight: 1.2,
-            textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+            lineHeight: 1.1,
+            letterSpacing: -1,
+            marginBottom: 16
           }}>
-            Income protection for India's delivery workers.
+            Real-time payout system for delivery workers.
           </h2>
           <p style={{
-            fontSize: 15, fontFamily: 'Inter',
-            color: 'rgba(255,255,255,0.8)',
+            fontSize: 15, fontFamily: 'Inter, sans-serif',
+            color: 'rgba(255,255,255,0.6)',
             lineHeight: 1.6,
           }}>
-            Auto-pays when floods, outages, or curfews stop you from working.
+            Secure access to your monitoring dashboard and settings.
           </p>
         </div>
       </div>
@@ -184,7 +145,7 @@ export default function Login() {
             className="font-display font-bold text-[28px] leading-tight"
             style={{ color: 'var(--text-primary)' }}
           >
-            Income protection for delivery workers.
+            System active.
           </motion.h1>
 
           <motion.p
@@ -192,24 +153,8 @@ export default function Login() {
             className="font-body text-[14px] leading-relaxed mt-2"
             style={{ color: 'var(--text-secondary)' }}
           >
-            Auto-pays when floods, outages, or curfews stop you from working.
+            Detecting anomalies securely.
           </motion.p>
-
-          <motion.div variants={item} className="flex flex-wrap gap-2 mt-4">
-            {['🌊 Flood cover', '📱 Outage pay', '🚫 Curfew pay'].map((chip) => (
-              <span
-                key={chip}
-                className="rounded-pill px-3 py-1.5 text-[12px] font-medium font-body"
-                style={{
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border)',
-                  color: 'var(--text-secondary)',
-                }}
-              >
-                {chip}
-              </span>
-            ))}
-          </motion.div>
         </div>
 
         {/* Desktop heading */}
@@ -324,7 +269,7 @@ export default function Login() {
 
           <div className="mt-5">
             <Button onClick={handleEmailLogin} loading={loading} fullWidth>
-              Sign In
+              Access system →
             </Button>
           </div>
         </motion.div>

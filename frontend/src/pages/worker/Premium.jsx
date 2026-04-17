@@ -71,12 +71,12 @@ export default function Premium() {
       animate="animate"
       exit="exit"
     >
-      <TopBar title="Your weekly premium" showBack />
+      <TopBar title="System fees" showBack />
 
       {/* Hero */}
       <div className="px-6 py-8 text-center">
         <p className="text-[11px] font-semibold font-body tracking-[1.5px] uppercase mb-2" style={{ color: 'var(--text-tertiary)' }}>
-          Weekly Premium
+          Weekly system fees
         </p>
         <div className="font-display font-extrabold text-[72px] tracking-[-3px] leading-none" style={{ color: 'var(--text-primary)' }}>
           ₹{animatedTotal}
@@ -125,7 +125,7 @@ export default function Premium() {
         {/* Coverage card */}
         <div className="rounded-card shadow-card p-4 mb-3" style={{ background: 'var(--bg-card)' }}>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[13px] font-body" style={{ color: 'var(--text-secondary)' }}>Covered up to</span>
+            <span className="text-[13px] font-body" style={{ color: 'var(--text-secondary)' }}>Monitoring up to</span>
             <span className="font-display text-[18px] font-bold text-brand">₹600 / week</span>
           </div>
           <div className="h-px mb-3" style={{ background: 'var(--border-light)' }} />
@@ -147,7 +147,7 @@ export default function Premium() {
             </div>
           ))}
           <p className="text-[12px] font-body mt-3" style={{ color: 'var(--text-tertiary)' }}>
-            Health, vehicle repairs and accidents not covered
+            Health, vehicle repairs and accidents not monitored
           </p>
         </div>
       </div>
@@ -164,8 +164,8 @@ export default function Premium() {
         }}
       >
         <div style={{ maxWidth: 560, width: '100%', margin: '0 auto' }}>
-          <Button onClick={handleActivate} fullWidth>
-            Activate for ₹{bd.total}/week →
+          <Button onClick={handleActivate} fullWidth style={{ transform: 'scale(1)', transition: 'transform 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+            Turn on payouts for ₹{bd.total}/week →
           </Button>
           <Button
             variant="ghost"

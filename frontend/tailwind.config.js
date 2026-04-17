@@ -5,13 +5,13 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#6366F1',
-          light: 'rgba(99,102,241,0.15)',
-          dark: '#4F46E5',
+          DEFAULT: '#22C55E',
+          light: 'rgba(34,197,94,0.15)',
+          dark: '#16A34A',
         },
         accent: {
-          DEFAULT: '#22D3EE',
-          light: 'rgba(34,211,238,0.12)',
+          DEFAULT: '#F59E0B',
+          light: 'rgba(245,158,11,0.12)',
         },
         success: {
           DEFAULT: '#22C55E',

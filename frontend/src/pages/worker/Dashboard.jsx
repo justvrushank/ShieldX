@@ -257,7 +257,7 @@ export default function Dashboard() {
     {
       label: 'Total paid out',
       value: displayTotalProtected > 0 ? formatINR(displayTotalProtected) : (activePolicy ? `₹${activePolicy.coverage || 600}` : '₹0'),
-      sub: totalClaims > 0 ? `${totalClaims} payout${totalClaims > 1 ? 's' : ''} received` : 'Coverage active',
+      sub: totalClaims > 0 ? `${totalClaims} payout${totalClaims > 1 ? 's' : ''} received` : 'Monitoring active',
       valueColor: '#818CF8',
     },
     {
@@ -268,9 +268,9 @@ export default function Dashboard() {
     },
     { label: 'Risk score', value: `${w.riskScore}`, sub: `${riskTierLabel} · ${riskDiscount}`, valueColor: '#22C55E' },
     {
-      label: 'Plan ends',
-      value: policyEndDate || 'Not covered',
-      sub: activePolicy ? `₹${activePolicy.price || w.premium} due` : 'Get a plan',
+      label: 'Monitoring ends',
+      value: policyEndDate || 'Not active',
+      sub: activePolicy ? `₹${activePolicy.price || w.premium} due` : 'Turn on payouts',
       valueColor: '#F1F5F9',
     },
   ]
@@ -384,11 +384,11 @@ export default function Dashboard() {
               <div className="flex items-center gap-2 mb-3">
                 <span style={{ fontSize: 24 }}>🛡️</span>
                 <p style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Inter, sans-serif', color: 'rgba(165,180,252,0.9)', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
-                  Not covered yet
-                </p>
+                System inactive
+              </p>
               </div>
               <h2 style={{ fontFamily: 'Bricolage Grotesque, sans-serif', fontSize: 26, fontWeight: 800, color: 'white', margin: '0 0 8px', letterSpacing: -0.5 }}>
-                Get covered from ₹49/week
+                Turn on payouts from ₹49/week
               </h2>
               <p style={{ fontSize: 14, color: 'rgba(165,180,252,0.75)', fontFamily: 'Inter, sans-serif', margin: '0 0 18px', lineHeight: 1.5 }}>
                 We monitor floods, platform outages, and curfews in your zone — and pay you automatically when something happens. No forms.
@@ -399,14 +399,14 @@ export default function Dashboard() {
                 whileTap={{ scale: 0.97 }}
                 style={{
                   width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-                  background: 'linear-gradient(135deg, #6366F1, #4F46E5)', color: 'white',
+                  background: 'linear-gradient(135deg, var(--brand), var(--brand-dark))', color: 'white',
                   fontSize: 15, fontWeight: 700, fontFamily: 'Inter, sans-serif',
                   cursor: 'pointer', transition: 'all 0.2s ease',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
+                  boxShadow: 'var(--shadow-brand)',
                 }}
               >
-                View coverage plans →
+                See system plans →
               </motion.button>
             </div>
           </motion.div>
@@ -458,7 +458,7 @@ export default function Dashboard() {
                 ₹{activePolicy.coverage || 600}
               </div>
               <p style={{ fontSize: 13, fontFamily: 'Inter', color: 'rgba(165,180,252,0.7)', marginTop: 4 }}>
-                coverage this week · {activePolicy.planName || activePolicy.planId || 'Standard'} plan
+                monitoring limit · {activePolicy.planName || activePolicy.planId || 'Standard'} system
               </p>
 
               <div style={{ height: 1, background: 'rgba(99,102,241,0.15)', margin: '14px 0' }} />
@@ -587,7 +587,7 @@ export default function Dashboard() {
                     {zoneAlert.probability}% flood risk detected in your zone
                   </p>
                   <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', fontFamily: 'Inter, sans-serif', margin: 0 }}>
-                    {zoneAlert.zone} · {zoneAlert.autoExtended ? 'Your coverage has been extended' : 'Get covered now to be protected'}
+                    {zoneAlert.zone} · {zoneAlert.autoExtended ? 'Monitoring has been extended' : 'Turn on payouts now to be protected'}
                   </p>
                 </div>
                 <button

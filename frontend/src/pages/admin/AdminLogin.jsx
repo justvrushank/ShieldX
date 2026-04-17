@@ -42,7 +42,7 @@ export default function AdminLogin() {
         navigate('/admin', { replace: true })
         return
       }
-      setError(err?.detail || 'Invalid credentials. Demo: admin / admin')
+      setError(err?.detail || 'Incorrect login details')
       setLoading(false)
     }
   }
@@ -114,7 +114,7 @@ export default function AdminLogin() {
             fontSize: 13, color: '#6B6B6B', fontFamily: 'Inter',
             marginTop: 6,
           }}>
-            ShieldX SentinelX · Restricted access
+            ShieldX System · Restricted access
           </p>
         </div>
 
@@ -206,32 +206,51 @@ export default function AdminLogin() {
           <motion.button
             type="submit"
             disabled={loading}
+            whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
             whileTap={{ scale: 0.97 }}
             style={{
               width: '100%', height: 48, marginTop: 4,
-              background: loading ? '#2A2A2A' : '#D97757',
+              background: loading ? '#2A2A2A' : 'linear-gradient(135deg, var(--brand), var(--brand-dark))',
               border: 'none', borderRadius: 12,
               fontSize: 15, fontWeight: 700, fontFamily: 'Inter',
               color: loading ? '#6B6B6B' : 'white',
               cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'background 0.15s',
+              boxShadow: 'var(--shadow-brand)',
             }}
           >
-            {loading ? 'Signing in...' : 'Sign in →'}
+            {loading ? 'Authenticating...' : 'Access system →'}
           </motion.button>
         </form>
 
-        <div style={{
-          marginTop: 16,
-          padding: '10px 14px',
-          background: 'rgba(217,119,87,0.06)',
-          border: '1px solid rgba(217,119,87,0.15)',
-          borderRadius: 8,
-          textAlign: 'center',
-        }}>
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => {
+            localStorage.setItem('gp-admin-auth', JSON.stringify({
+              authenticated: true,
+              username: 'admin',
+              loginAt: new Date().toISOString(),
+            }))
+            localStorage.setItem('admin_auth', 'true')
+            navigate('/admin', { replace: true })
+          }}
+          style={{
+            marginTop: 16, width: '100%',
+            padding: '12px 14px', cursor: 'pointer',
+            background: 'rgba(34,197,94,0.1)',
+            border: '1px solid rgba(34,197,94,0.25)',
+            borderRadius: 12, textAlign: 'center',
+            color: '#22C55E', fontSize: 14, fontWeight: 700, fontFamily: 'Inter'
+          }}
+        >
+          Enter Demo →
+        </motion.button>
+
+        <div style={{ textAlign: 'center', marginTop: 12 }}>
           <p style={{ fontSize: 12, fontFamily: 'Inter', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-            Demo credentials:
-            <span style={{ color: '#D97757', fontWeight: 700, marginLeft: 6 }}>admin / admin</span>
+            Demo access: admin / admin
           </p>
         </div>
       </motion.div>

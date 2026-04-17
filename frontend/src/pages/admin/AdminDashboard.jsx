@@ -70,8 +70,8 @@ export default function AdminDashboard() {
 
       {/* KPI */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <Card title="Active policies" value={overview?.active_policies} loading={loading} />
-        <Card title="Claims today" value={overview?.claims_today} loading={loading} />
+        <Card title="Active systems" value={overview?.active_policies} loading={loading} />
+        <Card title="Payouts today" value={overview?.claims_today} loading={loading} />
         <Card title="Pending review" value={overview?.pending_manual_review} loading={loading} />
         <Card title="Premium" value={`₹${financials?.monthly_premium_collected}`} loading={loading} />
         <Card title="Payouts" value={`₹${financials?.monthly_payouts}`} loading={loading} />
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
 
       {/* CLAIMS */}
       <div className="bg-slate-800 p-4 rounded-xl">
-        <h2 className="mb-2 font-semibold">Claims</h2>
+        <h2 className="mb-2 font-semibold">Payouts</h2>
         {(claims_by_trigger || []).map((c) => (
           <div key={c._id}>{c._id} — {c.count}</div>
         ))}

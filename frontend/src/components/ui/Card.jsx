@@ -24,7 +24,7 @@ export default function Card({
         style={{ ...baseStyle, cursor: 'pointer' }}
         onClick={onClick}
         whileTap={{ scale: 0.98 }}
-        whileHover={{ y: -1, boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}
+        whileHover={{ y: -2, boxShadow: '0 8px 30px rgba(34,197,94,0.12), inset 0 0 0 1px rgba(34,197,94,0.2)' }}
       >
         {children}
       </motion.div>
@@ -32,8 +32,12 @@ export default function Card({
   }
 
   return (
-    <div className={`${padding} ${className}`} style={baseStyle}>
+    <motion.div
+      className={`${padding} ${className}`}
+      style={baseStyle}
+      whileHover={{ y: -2, boxShadow: '0 8px 30px rgba(34,197,94,0.08)' }}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }
